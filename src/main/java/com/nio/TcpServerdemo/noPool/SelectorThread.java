@@ -1,4 +1,4 @@
-package com.nio.TcpServerdemo;
+package com.nio.TcpServerdemo.noPool;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -9,17 +9,22 @@ import java.util.Iterator;
 
 public class SelectorThread  extends Thread {
 	private Selector selector;
-	public  SelectorThread(Selector selector){
-			this.selector=selector;
+	public SelectorThread(Selector selector){
+		this.selector=selector;
 	}
-	
+
 	public void run(){
+		Iterator<SelectionKey> iterator=null;
 		try {
-			  //获取Selector 注册的通道数
-			int n=selector.select();
-			while(n>0){
+			//获取Selector 注册的通道数
+
+			while(true){
+				int n=selector.select();
+				if (n==0) {
+					continue;
+				}
 				// selector.selectedKeys()可以获取每个注册通道的key
-				Iterator<SelectionKey> iterator=selector.selectedKeys().iterator();
+				iterator=selector.selectedKeys().iterator();
 				while(iterator.hasNext()){
 					SelectionKey key=iterator.next();
 					if (key.isReadable()) {
@@ -31,12 +36,21 @@ public class SelectorThread  extends Thread {
 						System.out.println("收到服务器消息:"+receiveMsg+"from:"+channel.getRemoteAddress());
 						key.interestOps(SelectionKey.OP_READ);
 					}
+
+					if (key.isWritable()){
+						System.out.println("写入事件");
+					}
+
+					if (key.isConnectable()){
+						System.out.println("连接事件");
+					}
 					//处理下一个事件
 					iterator.remove();
 				}
-				
+
 			}
 		} catch (Exception e) {
+			iterator.remove();
 			e.printStackTrace();
 		}
 	}

@@ -1,4 +1,4 @@
-package com.nio.TcpServerdemo;
+package com.nio.TcpServerdemo.pool;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -37,7 +37,7 @@ public class SelectorClient {
 		//注册到选择器上
 		socketChannel.register(selector, SelectionKey.OP_READ);
 		//监听来自服务端的响应
-		new SelectorThread(selector).start();
+		new SelectorClientThread(selector).start();
 	}
 	
 	public void writeDataToServer(String message) throws IOException{
@@ -48,7 +48,7 @@ public class SelectorClient {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		SelectorClient client=new SelectorClient("192.168.0.130",6666);
+		SelectorClient client=new SelectorClient("192.160.0.101",6666);
 		client.writeDataToServer("我是一个客户端"+System.currentTimeMillis());
 	}
 }

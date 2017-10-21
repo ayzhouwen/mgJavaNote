@@ -1,4 +1,4 @@
-package com.nio.TcpServerdemo;
+package com.nio.TcpServerdemo.pool;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,6 +12,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+//2017年10月19日16:40:21,nio书中带线程池的例子,注意这个线程池不是
+//官方的线程池,是作者diy简单的池子,生产上要用官方的池子
 public class SelectorServer {
 		//服务器监听的端口
 	private static final int PORT =6666;
@@ -23,7 +25,7 @@ public class SelectorServer {
 		new SelectorServer().start(args);
 	}
 	
-	private void start(String[] args){
+	public void start(String[] args){
 		int  port=PORT;
 		if (args.length==1) {
 			port=Integer.valueOf(args[0]);
@@ -46,6 +48,8 @@ public class SelectorServer {
 			//注册通道到选择器
 			//第二个参数表名serverChannel 感兴趣的事件是OP_ACCEPT的事件
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+
 			//选择器不断循环从从选择器中选取已转备好的通道进行操作
 			//选取之后,会对其感兴趣的事件进行处理,将感兴趣的事件
 			//处理完毕后将key从集合中删除,表示该通道的事件已经处理完毕
@@ -63,6 +67,7 @@ public class SelectorServer {
 						SelectionKey key=iterator.next();
 						//判断感兴趣的事件类型
 						if (key.isAcceptable()) {
+							System.out.println("接受客户端连接:"+System.currentTimeMillis());
 							//这里可以强制转换为ServerSocketChannel
 							//因为这个选择器上目前只注册了一个类型的通道
 							ServerSocketChannel server=(ServerSocketChannel)key.channel();
@@ -74,11 +79,32 @@ public class SelectorServer {
 						}
 						
 						//如果是可读类型的事件,则获取传输过来的数据
-						if (key.isReadable()) {
-							readDataFromClient(key);
-						}
+//						if (key.isReadable()) {
+//							readDataFromClient(key);
+//						}
+
+				//		if (key.isWritable()){
+						//	System.out.println("写事件:"+System.currentTimeMillis());
+//							SocketChannel channel=(SocketChannel) key.channel();
+//							ByteBuffer bf=ByteBuffer.allocate(1024);
+//							bf.clear(); //清空缓存
+//							//
+//							while (channel.read(bf)>0){
+//								bf.flip();
+//								String wMsg=Charset.forName("UTF-8").newDecoder().decode(bf).toString();
+//								System.out.println("本次写入的字符串:"+wMsg);
+//								bf.clear();
+//							}
+
+				//		}
+
+//						if (key.isConnectable()){
+//							System.out.println("连接事件:"+System.currentTimeMillis());
+//						}
+
+
 						
-						//将已经处理的key从集合总删除
+						//将已经处理的key从集合总删除,否则下次循环时报错,因为server.accept();返回null
 						iterator.remove();
 				}
 			}
@@ -88,7 +114,7 @@ public class SelectorServer {
 		
 	}
 	
-	private void readDataFromClient(SelectionKey key) throws IOException{
+	public void readDataFromClient(SelectionKey key) throws Exception{
 				//获取key管理的channel对象
 				SocketChannel channel=(SocketChannel) key.channel();
 				//读取之前要清空缓冲区

@@ -21,6 +21,8 @@ public class BufferCompact {
 				//将M和e两个字符释放掉
 				System.out.println("release char "+buffer.get());
 				System.out.println("release char "+buffer.get());
+				System.out.println("release char "+buffer.get());
+				System.out.println("release char "+buffer.get());
 				//调用compact方法可以回收M和e字符占用的空间
 				//调用compact后的position位置是4
 				//0-3位置的字符一次是llow,4-5位的字符依次是ow

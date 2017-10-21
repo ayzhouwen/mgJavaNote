@@ -1,8 +1,6 @@
 package com.syntax;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,26 +58,28 @@ class SyntaxTest {
 //
 //        Map map1=(Map)JSON.parse(json);
 
-        Socket socket = new Socket("127.0.0.1", 10101);
-        // 消息内容
-        String message = "hello";
-        byte[] bytes = message.getBytes();
-        // 构造字节数组，长度为（4+内容长度）
-        // 其中4个字节长度字段是int为4个字节
-        ByteBuffer buffer = ByteBuffer.allocate(4 + bytes.length);
-        // 设置长度字段（仅仅是内容的长度）
-        buffer.putInt(bytes.length);
-        // 设置内容
-       // buffer.put(bytes);
-        buffer.get();
-        buffer.get(2);
-        buffer.get(4);
+//        Socket socket = new Socket("127.0.0.1", 10101);
+//        // 消息内容
+//        String message = "hello";
+//        byte[] bytes = message.getBytes();
+//        // 构造字节数组，长度为（4+内容长度）
+//        // 其中4个字节长度字段是int为4个字节
+//        ByteBuffer buffer = ByteBuffer.allocate(4 + bytes.length);
+//        // 设置长度字段（仅仅是内容的长度）
+//        buffer.putInt(bytes.length);
+//        // 设置内容
+//       // buffer.put(bytes);
+//        buffer.get();
+//        buffer.get(2);
+//        buffer.get(4);
+//
+//        byte[] array = buffer.array();
+//        for (int i = 0; i < 20; i++) {
+//            socket.getOutputStream().write(array);
+//        }
+//        socket.close();
 
-        byte[] array = buffer.array();
-        for (int i = 0; i < 20; i++) {
-            socket.getOutputStream().write(array);
-        }
-        socket.close();
+        System.out.println(2<<3);
 
 
     }
