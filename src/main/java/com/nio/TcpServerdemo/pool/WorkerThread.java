@@ -62,12 +62,21 @@ public class WorkerThread extends  Thread {
         }
 
 
+
         if (count<0){
             channel.close();
             return;
         }
 
-        key.interestOps(key.interestOps()|SelectionKey.OP_READ); //重新设置感兴趣
+        buffer.clear();
+        String str="ok"+System.currentTimeMillis();
+        buffer.put(str.getBytes());
+        buffer.flip();
+        System.out.println(str);
+        channel.write(buffer);
+
+
+        key.interestOps(key.interestOps()|SelectionKey.OP_READ); //添加读事件
         key.selector().wakeup(); //唤醒选择器,以至于这个key能够被再次激活
 
 
@@ -77,7 +86,7 @@ public class WorkerThread extends  Thread {
     //消除读操作,并唤醒线程
     synchronized void  serviceChannel(SelectionKey key){
         this.key=key;
-        key.interestOps(key.interestOps()& (~SelectionKey.OP_READ));
+        key.interestOps(key.interestOps()& (~SelectionKey.OP_READ)); //取消读事件,
         this.notify(); //唤醒线程
     }
 

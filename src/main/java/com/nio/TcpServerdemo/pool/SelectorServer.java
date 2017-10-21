@@ -12,8 +12,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
-//2017年10月19日16:40:21,nio书中带线程池的例子,注意这个线程池不是
-//官方的线程池,是作者diy简单的池子,生产上要用官方的池子
 public class SelectorServer {
 		//服务器监听的端口
 	private static final int PORT =6666;
@@ -55,7 +53,7 @@ public class SelectorServer {
 			//处理完毕后将key从集合中删除,表示该通道的事件已经处理完毕
 			while(true){
 				//这个操作可能会被阻塞,因为不知道注册在这个选择器上通道是否准备好了
-				int n=selector.select();
+				int n=selector.select(0);
 				if (n==0) {
 					continue;
 				}
@@ -74,33 +72,21 @@ public class SelectorServer {
 							//调用accept方法可以得到连接到此地址的客户端连接
 							SocketChannel channel =server.accept();
 							registerChannel(selector,channel,SelectionKey.OP_READ);
+							//registerChannel(selector,channel,SelectionKey.OP_WRITE);
 							//给客户端发型响应消息
 							sayHello(channel);
 						}
 						
 						//如果是可读类型的事件,则获取传输过来的数据
-//						if (key.isReadable()) {
-//							readDataFromClient(key);
+						if (key.isReadable()) {
+							readDataFromClient(key);
+						}
+
+						//写事件一般不监听,即使监听那么也要尽快注销此事件,否则会死循环
+//						if (key.isWritable()){
+//							interestWrite(key,false);
 //						}
 
-				//		if (key.isWritable()){
-						//	System.out.println("写事件:"+System.currentTimeMillis());
-//							SocketChannel channel=(SocketChannel) key.channel();
-//							ByteBuffer bf=ByteBuffer.allocate(1024);
-//							bf.clear(); //清空缓存
-//							//
-//							while (channel.read(bf)>0){
-//								bf.flip();
-//								String wMsg=Charset.forName("UTF-8").newDecoder().decode(bf).toString();
-//								System.out.println("本次写入的字符串:"+wMsg);
-//								bf.clear();
-//							}
-
-				//		}
-
-//						if (key.isConnectable()){
-//							System.out.println("连接事件:"+System.currentTimeMillis());
-//						}
 
 
 						
@@ -109,6 +95,7 @@ public class SelectorServer {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			iterator.remove();
 		}
 		
@@ -126,6 +113,13 @@ public class SelectorServer {
 					String receiveMsg=Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
 					System.out.println("接收到客户端消息:"+receiveMsg+" from:"+channel.getRemoteAddress());
 				}
+
+				buffer.clear();
+				buffer.put(("time:"+System.currentTimeMillis()).getBytes());
+				buffer.flip();
+
+
+				channel.write(buffer);
 	}
 	
 	//向客户端发送响应消息
@@ -133,7 +127,12 @@ public class SelectorServer {
 		buffer.clear();
 		buffer.put(GREETING.getBytes());
 		buffer.flip();
-		channel.write(buffer);
+		while(buffer.hasRemaining()) {
+			channel.write(buffer);
+		}
+
+
+
 	}
 	
 	//注册客户端连接到选择器上
@@ -145,5 +144,18 @@ public class SelectorServer {
 		channel.configureBlocking(false);
 		//注册该channel到选择器上
 		channel.register(selector, opRead);
+	}
+
+	//设置通道写事件是否感兴趣
+	public  void interestWrite(SelectionKey key,boolean isInterest){
+		int newInterest=key.interestOps();
+		if (isInterest){
+			newInterest|=SelectionKey.OP_WRITE;
+		}else {
+			newInterest &=~SelectionKey.OP_WRITE;
+		}
+		key.interestOps(newInterest);
+
+
 	}
 }
