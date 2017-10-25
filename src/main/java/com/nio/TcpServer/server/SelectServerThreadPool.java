@@ -1,4 +1,7 @@
-package com.nio.TcpServerdemo.pool;
+package com.nio.TcpServer.server;
+
+import com.nio.TcpServer.pool.ThreadPool;
+import com.nio.TcpServer.pool.WorkerThread;
 
 import java.nio.channels.SelectionKey;
 

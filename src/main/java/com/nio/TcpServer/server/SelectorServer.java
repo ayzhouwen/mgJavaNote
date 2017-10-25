@@ -1,4 +1,6 @@
-package com.nio.TcpServerdemo.pool;
+package com.nio.TcpServer.server;
+
+import com.nio.TcpServer.decode.PacketDecode;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,14 +13,16 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+import java.util.List;
 
 public class SelectorServer {
 		//服务器监听的端口
 	private static final int PORT =6666;
 	//处理数据的缓冲区
-	private ByteBuffer buffer=ByteBuffer.allocate(1024);
+	private ByteBuffer RevBuffer =ByteBuffer.allocate(1024);
 	//欢迎消息
-	private static final String GREETING = "欢迎来到神秘花园.";
+	private static final String GREETING = "welcom to Eden";
+
 	public static void main(String[] args) {
 		new SelectorServer().start(args);
 	}
@@ -79,7 +83,8 @@ public class SelectorServer {
 						
 						//如果是可读类型的事件,则获取传输过来的数据
 						if (key.isReadable()) {
-							readDataFromClient(key);
+							//readData(key);
+							decodeReadData(key);
 						}
 
 						//写事件一般不监听,即使监听那么也要尽快注销此事件,否则会死循环
@@ -100,35 +105,44 @@ public class SelectorServer {
 		}
 		
 	}
-	
-	public void readDataFromClient(SelectionKey key) throws Exception{
+
+	//读取通道数据,未进行解码,会出现粘包问题
+	public void readData(SelectionKey key) throws Exception{
 				//获取key管理的channel对象
 				SocketChannel channel=(SocketChannel) key.channel();
 				//读取之前要清空缓冲区
-				buffer.clear();
-				if (channel.read(buffer)<0) {
-					channel.close();
-				}else {
-					buffer.flip();
-					String receiveMsg=Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-					System.out.println("接收到客户端消息:"+receiveMsg+" from:"+channel.getRemoteAddress());
-				}
-
-				buffer.clear();
-				buffer.put(("time:"+System.currentTimeMillis()).getBytes());
-				buffer.flip();
-
-
-				channel.write(buffer);
+				RevBuffer.clear();
+					while (channel.read(RevBuffer)>0){
+						RevBuffer.flip();
+						String receiveMsg=Charset.forName("UTF-8").newDecoder().decode(RevBuffer).toString();
+						System.out.println("接收到客户端消息:"+receiveMsg+" from:"+channel.getRemoteAddress());
+						RevBuffer.clear();
+					}
 	}
+
+	//获取通道数据,并对其进行解码码,并参照协议来解决粘包问题
+	public  void decodeReadData(SelectionKey key) throws Exception{
+		//获取key管理的channel对象
+		SocketChannel channel=(SocketChannel) key.channel();
+		List<String> msgs=PacketDecode.headBodyDecode(channel);
+		if (msgs!=null){
+			System.out.println("本次收到的数据包个数:"+msgs.size());
+			for (String e:msgs){
+				System.out.println("客户消息:"+e);
+			}
+
+		}
+	}
+
+
 	
 	//向客户端发送响应消息
 	private void sayHello(SocketChannel channel) throws IOException{
-		buffer.clear();
-		buffer.put(GREETING.getBytes());
-		buffer.flip();
-		while(buffer.hasRemaining()) {
-			channel.write(buffer);
+		RevBuffer.clear();
+		RevBuffer.put(GREETING.getBytes());
+		RevBuffer.flip();
+		while(RevBuffer.hasRemaining()) {
+			channel.write(RevBuffer);
 		}
 
 

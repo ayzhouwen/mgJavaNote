@@ -1,4 +1,4 @@
-package com.nio.TcpServerdemo.pool;
+package com.nio.TcpServer.pool;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -84,7 +84,7 @@ public class WorkerThread extends  Thread {
     }
 
     //消除读操作,并唤醒线程
-    synchronized void  serviceChannel(SelectionKey key){
+    public synchronized void  serviceChannel(SelectionKey key){
         this.key=key;
         key.interestOps(key.interestOps()& (~SelectionKey.OP_READ)); //取消读事件,
         this.notify(); //唤醒线程

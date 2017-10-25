@@ -1,5 +1,6 @@
-package com.nio.TcpServerdemo.pool;
+package com.nio.TcpServer.client;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -7,6 +8,9 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+/**
+ *
+ */
 public class SelectorClientThread extends Thread {
 	private Selector selector;
 	public SelectorClientThread(Selector selector){
@@ -27,15 +31,7 @@ public class SelectorClientThread extends Thread {
 				 iterator=selector.selectedKeys().iterator();
 				while(iterator.hasNext()){
 					SelectionKey key=iterator.next();
-					if (key.isReadable()) {
-						SocketChannel channel=(SocketChannel)key.channel();
-						ByteBuffer buffer =ByteBuffer.allocate(1024);
-						channel.read(buffer);
-						buffer.flip();
-						String receiveMsg=Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-						System.out.println("收到服务器消息:"+receiveMsg+"from:"+channel.getRemoteAddress());
-						key.interestOps(SelectionKey.OP_READ);
-					}
+					normalRead(key);
 
 					if (key.isWritable()){
 						System.out.println("写入事件");
@@ -47,11 +43,27 @@ public class SelectorClientThread extends Thread {
 					//处理下一个事件
 					iterator.remove();
 				}
-				
+
 			}
 		} catch (Exception e) {
 			iterator.remove();
 			e.printStackTrace();
 		}
 	}
+
+
+	//正常收发数据方法
+	public  void normalRead(SelectionKey key) throws IOException {
+		if (key.isReadable()) {
+			SocketChannel channel=(SocketChannel)key.channel();
+			ByteBuffer buffer =ByteBuffer.allocate(1024);
+			channel.read(buffer);
+			buffer.flip();
+			String receiveMsg= Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
+			System.out.println("收到服务器消息:"+receiveMsg+"from:"+channel.getRemoteAddress());
+			key.interestOps(SelectionKey.OP_READ);
+		}
+	}
+
+	//
 }
