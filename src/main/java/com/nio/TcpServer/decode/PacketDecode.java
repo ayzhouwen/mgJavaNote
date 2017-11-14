@@ -18,7 +18,7 @@ public class PacketDecode {
     private  static  	int decodeNum=1;
     public static List<String> headBodyDecode(SocketChannel channel) throws IOException {
     //    System.out.println("************************开始第+"+decodeNum+"+解码*******************");
-        ByteBuffer revBuffer = ByteBuffer.allocate(731);
+        ByteBuffer revBuffer = ByteBuffer.allocate(32);
       List<String>   result = null;
         int bodylen;
         if (channel.read(revBuffer) <= 0) {

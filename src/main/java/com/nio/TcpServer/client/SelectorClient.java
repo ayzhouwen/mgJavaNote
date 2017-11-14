@@ -62,7 +62,7 @@ public class SelectorClient {
 
 	//测试多次发包,并对数据进行编码后在发送到服务端
 	public void manyEncodeWrite() throws IOException{
-		int num=50000;
+		int num=1000;
 		String newStr;
 		for (int i=0;i<num;i++){
 			newStr="第"+i+"次发送";
@@ -75,7 +75,7 @@ public class SelectorClient {
 	
 	public static void main(String[] args) throws IOException {
 		SelectorClient client=new SelectorClient("192.168.0.101",6666);
-	//	SelectorClient client=new SelectorClient("192.168.199.238",6666);
+	//SelectorClient client=new SelectorClient("192.168.199.238",6666);
 		//client.manyWrite("我是一个客户端");
 		try {
 			Thread.sleep(2000);

@@ -58,6 +58,7 @@ public class PutTakeTest {
 				try {
 					int seed=(this.hashCode()^(int)System.nanoTime());
 					int sum=0;
+					System.out.println("product:开始等待1前"); //注意如果在await()后面写输出,那么输出的内容是无法保证在主线程的ok前面的,因为await后就是靠线程竞争了,没有顺序了
 					barrier.await(); //等待一起开始
 					for(int i=nTrials;i>0;--i){
 						bb.put(seed);
@@ -66,9 +67,8 @@ public class PutTakeTest {
 					}
 			
 					putSum.getAndAdd(sum);
-					System.out.println("product:开始等待");
+					System.out.println("product:开始等待2前"); //同上
 					barrier.await(); //等待一起结束
-					System.out.println("product:等待完毕");
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException(e);
@@ -82,6 +82,7 @@ public class PutTakeTest {
 			@Override
 			public void run() {
 				try {
+					System.out.println("consumer:等待1前");//输出位置同Producer
 					barrier.await();
 					Integer  sum=0;
 					for(int i=nTrials;i>0;--i){
@@ -89,8 +90,9 @@ public class PutTakeTest {
 					}
 				
 					takeSum.getAndAdd(sum);
-				
+					System.out.println("consumer:等待2前");//输出位置同Producer
 					barrier.await();
+
 				} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException(e);

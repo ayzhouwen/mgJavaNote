@@ -11,7 +11,7 @@ public class SemaphoreTest {
 		// 线程池
 		ExecutorService exec = Executors.newCachedThreadPool();
 		// 只能5个线程同时访问
-		final Semaphore semp = new Semaphore(0);//获取锁资源数量,为0一个也不能访问(除非	最先执行semp.release();),会一直阻塞,相当去最大并发数量,类似阻塞队列,
+		final Semaphore semp = new Semaphore(3);//获取锁资源数量,为0一个也不能访问(除非	最先执行semp.release();),会一直阻塞,相当去最大并发数量,类似阻塞队列,
 		// 模拟20个客户端访问
 	
 		for (int index = 0; index < 20; index++) {

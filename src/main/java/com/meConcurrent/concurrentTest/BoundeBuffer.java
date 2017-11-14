@@ -63,7 +63,7 @@ public class BoundeBuffer<E> {
 				public void run() {
 					try {
 						long l=System.currentTimeMillis();
-						//System.out.println("put:"+l);
+						System.out.println("put:"+l);
 						buffer.put(l);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -80,7 +80,7 @@ public class BoundeBuffer<E> {
 				@Override
 				public void run() {
 					try {
-						//System.out.println("take:"+buffer.take());
+						System.out.println("take:"+buffer.take());
 						buffer.take();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block

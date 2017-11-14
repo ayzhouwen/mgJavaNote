@@ -22,6 +22,7 @@ public class SelectorServer {
 	private ByteBuffer RevBuffer =ByteBuffer.allocate(1024);
 	//欢迎消息
 	private static final String GREETING = "welcom to Eden";
+	private 		int sumPack=0; //测试收到了多少数据包,目前不考虑并发
 
 	public static void main(String[] args) {
 		new SelectorServer().start(args);
@@ -83,7 +84,7 @@ public class SelectorServer {
 						
 						//如果是可读类型的事件,则获取传输过来的数据
 						if (key.isReadable()) {
-							//readData(key);
+						//	readData(key);
 							decodeReadData(key);
 						}
 
@@ -124,11 +125,20 @@ public class SelectorServer {
 	public  void decodeReadData(SelectionKey key) throws Exception{
 		//获取key管理的channel对象
 		SocketChannel channel=(SocketChannel) key.channel();
-		List<String> msgs=PacketDecode.headBodyDecode(channel);
+		List<String> msgs= null;
+		try {
+			msgs = PacketDecode.headBodyDecode(channel);
+		} catch (IOException e) {
+			channel.close();
+			e.printStackTrace();
+		}
 		if (msgs!=null){
-			System.out.println("本次收到的数据包个数:"+msgs.size());
+			//System.out.println("本次收到的数据包个数:"+msgs.size());
+
 			for (String e:msgs){
-				System.out.println("客户消息:"+e);
+				//System.out.println("客户消息:"+e);
+				sumPack++;
+				System.out.println("现已收到"+sumPack+"个应用层包,内容:"+e);
 			}
 
 		}
