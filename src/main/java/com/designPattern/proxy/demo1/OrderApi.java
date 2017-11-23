@@ -1,4 +1,4 @@
-package com.designPattern.proxy;
+package com.designPattern.proxy.demo1;
 //订单接口
 public interface  OrderApi {
 	//获取产品名称

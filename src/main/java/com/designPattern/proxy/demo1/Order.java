@@ -1,4 +1,4 @@
-package com.designPattern.proxy;
+package com.designPattern.proxy.demo1;
 
 public class Order  implements OrderApi {
 
