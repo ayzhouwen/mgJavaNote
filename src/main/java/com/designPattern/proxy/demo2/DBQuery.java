@@ -14,7 +14,7 @@ public class DBQuery implements  IDBQuery
     }
 
     @Override
-    public String requset() {
+    public String request() {
         System.out.println("最终实现类执行");
         return  "requset string";
     }

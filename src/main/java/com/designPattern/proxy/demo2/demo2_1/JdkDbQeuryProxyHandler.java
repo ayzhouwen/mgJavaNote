@@ -14,7 +14,7 @@ public class JdkDbQeuryProxyHandler implements InvocationHandler {
         if (real==null){
             real=new DBQuery();  //如果时第一次调用,则生成真实对象
         }
-        return real.requset();
+        return real.request();
     }
 }
 

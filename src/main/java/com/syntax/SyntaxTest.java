@@ -1,5 +1,7 @@
 package com.syntax;
 
+import com.syntax.Interface.Const;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,7 @@ class SyntaxTest {
 
         System.out.println(2<<3);
 
-
+        System.out.println(Const.ip+","+Const.port);
     }
 
 
