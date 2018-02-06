@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 public class AsynchronousFileChannelTest {
     private String filepath = "D:\\zw\\test\\";
 
-    //读写文件主线程等待结果方式进行异步调用,一般没有这么用的都是用的,回调方式比这种方式性能更好,但是异步的读写都是异步的目前想到的是用队列实现数据传递,队列元素存储字节数组
+    //读写文件主线程等待结果方式进行异步调用,
     public void readFile() throws IOException, ExecutionException, InterruptedException {
         //  Path readPath= Paths.get(filepath+"localhost_access_log.2017-10-16.txt");
         Path readPath = Paths.get(filepath + "1.png");
@@ -53,10 +53,10 @@ public class AsynchronousFileChannelTest {
 
 
 
+
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
         AsynchronousFileChannelTest asynchronousFileChannelTest = new AsynchronousFileChannelTest();
         //   asynchronousFileChannelTest.readFile();
-
 
     }
 }

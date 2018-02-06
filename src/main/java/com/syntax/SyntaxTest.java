@@ -1,10 +1,9 @@
 package com.syntax;
 
-import com.syntax.Interface.Const;
-
+import javax.script.ScriptException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.EnumSet;
 
 /**
  * @author admin
@@ -12,154 +11,95 @@ import java.util.List;
 //临时随手代码测试类,可以忽略次类
 class SyntaxTest {
 
-    static enum Type {
-
-        /**
-         * 普通订单
-         */
-        general,
-
-        /**
-         * 兑换订单
-         */
-        exchange,
-
-        /**
-         * 福袋订单
-         */
-        fudai
-    }
-
-    static int add(int n) {
-        if (n <= 1) {
-            return 1;
-        } else {
-            return add(n - 1) + n;
-        }
-    }
-
-
-    static int recur(int n) {
-        if (n <= 1) {
-            return 1;
-        } else {
-            return recur(n - 1) * n;
-        }
-    }
-
-    volatile int sk[];
-
     //   private static final Unsafe unsafe = Unsafe.getUnsafe();
-    public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-
-//        Map<String,Object> map=new HashedMap();
-//        A a=new A(3,"abc"); map.put("a",a);
-//        A b=new A(4,"abce");map.put("b",b);
-//        A c=new A(4,"abcea省道"); map.put("c",c);
-//        String json= JSON.toJSONString(map);
+    public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, ScriptException {
+//        Date now = DateUtil.date();
+//        System.out.println( now);
+//        Integer n=-3;
+//        //下一天
+//        System.out.println("明天"+ DateUtil.offsetDay(now,n));      ;
+//        //下一周
+//        System.out.println("下一周"+DateUtil.offsetWeek(now,n));
+//        //下一个月
+//        System.out.println("下一个月"+DateUtil.offsetMonth(now,n));
+//        //下一个季度
+//        System.out.println("下一个季度"+DateUtil.offsetMonth(now,3*n));
+//        //下一年
+//        System.out.println("下一年:"+DateUtil.offsetMinute(now,n));
 //
-//        Map map1=(Map)JSON.parse(json);
-
-//        Socket socket = new Socket("127.0.0.1", 10101);
-//        // 消息内容
-//        String message = "hello";
-//        byte[] bytes = message.getBytes();
-//        // 构造字节数组，长度为（4+内容长度）
-//        // 其中4个字节长度字段是int为4个字节
-//        ByteBuffer buffer = ByteBuffer.allocate(4 + bytes.length);
-//        // 设置长度字段（仅仅是内容的长度）
-//        buffer.putInt(bytes.length);
-//        // 设置内容
-//       // buffer.put(bytes);
-//        buffer.get();
-//        buffer.get(2);
-//        buffer.get(4);
+//        System.out.println(DateUtil.parseDateTime("2018-1-13 00:00:01").isAfterOrEquals(DateUtil.parseDateTime("2018-1-13 10:00:00")));
 //
-//        byte[] array = buffer.array();
-//        for (int i = 0; i < 20; i++) {
-//            socket.getOutputStream().write(array);
-//        }
-//        socket.close();
+//        System.out.println("2018-01-19 10:15:18abc".substring(0,10));
+//        ReUtil.replaceAll("asdasd", "\\.", "/");
 
-        System.out.println(2<<3);
+        System.out.println(Color.valueOf("green"));  ;
+        System.out.println(EnumSet.of(Color.green));  ;
+        System.out.println(Color.getName(1));  ;
 
-        System.out.println(Const.ip+","+Const.port);
     }
+
 
 
 }
 
+class  Person implements Serializable {
 
-class A {
-    protected int id;
+    public  int age;
     public String name;
-    public A( int id,String name){
-        this.id=id;
-        this.name=name;
-    }
+
+    public  Person next;
 }
 
-class B extends A {
+  enum Color{
+        red("红色",1),yellow("黄色",2),green("绿色",3);
+      // 成员变量
+      private String name;
+      private int index;
 
-    public B(int id, String name) {
-        super(id, name);
-    }
-}
+      public String getName() {
+          return name;
+      }
 
-class SuperClass {
-    static List<Integer> getlist() {
-        List<Integer> list = new ArrayList<>();
-        list.add(3);
-        list.add(4);
-        list.add(5);
-        return list;
-    }
+      public void setName(String name) {
+          this.name = name;
+      }
 
-    List<Integer> getChangeList() {
-        List<Integer> list = SuperClass.getlist();
-        for (Integer node : list) {
-            list.set(0, 444);
+      public int getIndex() {
+          return index;
+      }
 
-        }
-        List<SuperClass> sulist = new ArrayList<>();
-        SuperClass sc1 = new SuperClass(3);
-        SuperClass sc2 = new SuperClass(4);
-        sulist.add(sc1);
-        sulist.add(sc2);
+      public void setIndex(int index) {
+          this.index = index;
+      }
 
-        for (SuperClass node : sulist) {
-            node.n += 100;
-        }
-        return list;
+      // 构造方法
+      private Color(String name, int index) {
+          this.name = name;
+          this.index = index;
+      }
+      // 普通方法
+      public static String getName(int index) {
+          for (Color c : Color.values()) {
+              if (c.getIndex()== index) {
+                  return c.name;
+              }
+          }
+          return null;
+      }
 
-    }
-
-    public int n;
-
-    //SuperClass(){
-    //    System.out.println("SuperClass()");
-    //}
-    SuperClass(int n) {
-        System.out.println("SuperClass(int n)");
-        this.n = n;
-    }
-}
-
-class SubClass extends SuperClass {
-    private int n;
-
-    SubClass() {
-        super(300);
-        System.out.println("SuperClass");
-
-    }
-
-    SubClass(int n) {
-        super(n);
-        System.out.println("SubClass(int n):" + n);
-        this.n = n;
-    }
+      //覆盖方法
 
 
-}
+      @Override
+      public String toString() {
+          return this.index+"_"+this.name;
+      }
+
+
+  }
+
+
+
+
+
 

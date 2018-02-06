@@ -1,10 +1,8 @@
 package com.meConcurrent;
 //SimpleDateFormat  日期非线程安全引起的并发问题
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,7 +11,6 @@ public class TestSDF {
 		public String format(Date d){
 			return sdf.format(d);
 		}
-		
 		public static void main(String[] args) {
 				ExecutorService es=Executors.newFixedThreadPool(50);
 				for(int i=0;i<50;i++){
