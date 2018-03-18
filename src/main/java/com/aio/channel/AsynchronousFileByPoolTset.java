@@ -61,8 +61,8 @@ public class AsynchronousFileByPoolTset {
         fileChannel.read(buffers, 0, buffers, handler);
         fileChannel.read(buffers, 0, buffers, handler);
 
-        countDownLatch.await(); //由于是异步的,所以此处必须阻塞住
-        pool.shutdown(); //线程池不关闭,jvm不会被关闭
+      countDownLatch.await(); //由于是异步的,所以此处必须阻塞住
+      pool.shutdown(); //线程池不关闭,jvm不会被关闭
         System.out.println("ok");
     }
 
@@ -72,18 +72,40 @@ public class AsynchronousFileByPoolTset {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("开始执行任务");
+                System.out.println(Thread.currentThread().getName()+"开始执行任务");
                 try {
                     Thread.sleep(new Random().nextInt(5000));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("执行完毕");
+                System.out.println(Thread.currentThread().getName()+"执行完毕");
                 countDownLatch.countDown();
             }
         }).start();
 
-        countDownLatch.await(); //由于是异步的,所以此处必须阻塞住
+       //countDownLatch.await(); //由于是异步的,所以此处必须阻塞住
+        System.out.println("ok");
+    }
+
+//线程池里只要有线程,那么就会一直挂住jvm进程
+    public static void test3() throws InterruptedException {
+        ExecutorService pool = Executors.newFixedThreadPool(4);
+        pool.submit(new Runnable() {
+            @Override
+            public void run() {
+
+                System.out.println(Thread.currentThread().getName()+"开始执行任务");
+                try {
+                    Thread.sleep(new Random().nextInt(5000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName()+"执行完毕");
+            }
+        });
+
+
+        //countDownLatch.await(); //由于是异步的,所以此处必须阻塞住
         System.out.println("ok");
     }
 
@@ -102,8 +124,9 @@ public class AsynchronousFileByPoolTset {
         }
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-        test1();
-     //   test2();
+      //  test1();
+    //  test2();
+        test3();
 
     }
 }
