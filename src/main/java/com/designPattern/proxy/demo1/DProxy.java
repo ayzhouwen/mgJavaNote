@@ -32,7 +32,7 @@ public class DProxy implements InvocationHandler  {
 		return orderApi;
 	}
 	public static void main(String[] args) {
-		Order order =new Order("设计模式","张三");
+		Order order =new Order("设计模式","李四");
 		//创建一个动态代理
 		DProxy  dp=new DProxy();
 		OrderApi orderApi=dp.getProxyInterface(order);
