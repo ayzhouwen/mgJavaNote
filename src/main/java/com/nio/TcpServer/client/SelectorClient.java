@@ -39,6 +39,7 @@ public class SelectorClient {
 		//注册到选择器上
 		socketChannel.register(selector, SelectionKey.OP_READ);
 		//监听来自服务端的响应
+		//socketChannel.socket().setSendBufferSize(1024*1024*10*10);
 		new SelectorClientThread(selector).start();
 	}
 	//单次发包
@@ -48,33 +49,39 @@ public class SelectorClient {
 		String[] args={};
 		
 	}
-	//测试多次发包,使服务端出现粘包效果
-	public void manyWrite(String message) throws IOException{
-		int num=100000;
-		String newStr;
-		for (int i=0;i<num;i++){
-			newStr="第"+i+"次发送";
-			ByteBuffer writeBuffer =ByteBuffer.wrap(newStr.getBytes("UTF-8"));
-			socketChannel.write(writeBuffer);
-			String[] args={};
-		}
-	}
+
 
 	//测试多次发包,并对数据进行编码后在发送到服务端
 	public void manyEncodeWrite() throws IOException{
-		int num=1000;
+		int num=10000;
 		String newStr;
 		for (int i=0;i<num;i++){
-			newStr="第"+i+"次发送";
+			newStr=getLongStr().toString();//"第"+i+"次发送";
 			ByteBuffer bf= PacketEncode.HeadBodyEncode(newStr);
-			socketChannel.write(bf);
+
+			//主要大数据发送要根据返回值循环发送
+			while(bf.hasRemaining()){
+              int r=   socketChannel.write(bf);
+                System.out.println("本次发送"+r+"个字节");
+            }
+
 		}
 	}
 
+	//模拟大数据
+	public StringBuilder getLongStr(){
+		StringBuilder sb=new StringBuilder();
+		//sb.append("开始");
+		for (int i=0;i<10000000;i++){
+			sb.append("呵");
+		}
 
+		//sb.append("结束");
+		return sb;
+	}
 	
 	public static void main(String[] args) throws IOException {
-		SelectorClient client=new SelectorClient("192.168.0.101",6666);
+		SelectorClient client=new SelectorClient("192.168.2.184",6666);
 	//SelectorClient client=new SelectorClient("192.168.199.238",6666);
 		//client.manyWrite("我是一个客户端");
 		try {

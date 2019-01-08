@@ -1,6 +1,7 @@
 package com.nio.TcpServer.server;
 
-import com.nio.TcpServer.decode.PacketDecode;
+
+import com.nio.TcpServer.sessoin.ChannelSessoin;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -77,15 +78,19 @@ public class SelectorServer {
 							//调用accept方法可以得到连接到此地址的客户端连接
 							SocketChannel channel =server.accept();
 							registerChannel(selector,channel,SelectionKey.OP_READ);
+
+
 							//registerChannel(selector,channel,SelectionKey.OP_WRITE);
 							//给客户端发型响应消息
 							sayHello(channel);
+
+
 						}
 						
 						//如果是可读类型的事件,则获取传输过来的数据
-						if (key.isReadable()) {
-						//	readData(key);
-							decodeReadData(key);
+						if (key.isReadable()&&(key.readyOps() & (SelectionKey.OP_READ))!= 0) {
+							ChannelSessoin  cs= (ChannelSessoin) key.attachment();
+							cs.doIo(key);
 						}
 
 						//写事件一般不监听,即使监听那么也要尽快注销此事件,否则会死循环
@@ -95,7 +100,7 @@ public class SelectorServer {
 
 
 
-						
+
 						//将已经处理的key从集合总删除,否则下次循环时报错,因为server.accept();返回null
 						iterator.remove();
 				}
@@ -121,28 +126,6 @@ public class SelectorServer {
 					}
 	}
 
-	//获取通道数据,并对其进行解码码,并参照协议来解决粘包问题
-	public  void decodeReadData(SelectionKey key) throws Exception{
-		//获取key管理的channel对象
-		SocketChannel channel=(SocketChannel) key.channel();
-		List<String> msgs= null;
-		try {
-			msgs = PacketDecode.headBodyDecode(channel);
-		} catch (IOException e) {
-			channel.close();
-			e.printStackTrace();
-		}
-		if (msgs!=null){
-			//System.out.println("本次收到的数据包个数:"+msgs.size());
-
-			for (String e:msgs){
-				//System.out.println("客户消息:"+e);
-				sumPack++;
-				System.out.println("现已收到"+sumPack+"个应用层包,内容:"+e);
-			}
-
-		}
-	}
 
 
 	
@@ -167,7 +150,10 @@ public class SelectorServer {
 		//设为非阻塞模式
 		channel.configureBlocking(false);
 		//注册该channel到选择器上
-		channel.register(selector, opRead);
+		SelectionKey key=		channel.register(selector, opRead);
+
+		ChannelSessoin cs = new ChannelSessoin(channel, key);
+		key.attach(cs);
 	}
 
 	//设置通道写事件是否感兴趣
