@@ -67,8 +67,8 @@ public class MappedByteBufferTest {
 
     //写文件测试
     void test2() throws IOException, InterruptedException {
-        String path = "D:\\zw\\myTest\\1.rar";
-        String path1 = "D:\\zw\\myTest\\1_1.rar";
+        String path = "D:\\zw\\myTest\\test.iso";
+        String path1 = "D:\\zw\\myTest\\test_1.iso";
         File f = new File(path1);
         FileInputStream fis = new FileInputStream(path);
         BufferedInputStream bis = new BufferedInputStream(fis);
