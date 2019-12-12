@@ -1,5 +1,7 @@
 package com.syntax;
 
+import cn.hutool.cache.CacheUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 //诡异代码汇总
@@ -31,7 +33,10 @@ public class Strange {
 	   
 	   for (int i = 0; i < ls1.size(); i++) {  
 	       System.err.println( ls1.get(i) ) ;     //这里会报错,跟println实现有关
-	   }  
+	   }
+
+
+
 
 	}
 public static void main(String[] args) {

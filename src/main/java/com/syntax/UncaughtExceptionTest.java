@@ -1,6 +1,7 @@
 package com.syntax;
 
-import com.xiaoleilu.hutool.util.ThreadUtil;
+
+import cn.hutool.core.thread.ThreadUtil;
 
 //目前测试的结果跟文章的结果不一致,文章说捕获不到UncaughtException异常,但是实验发现是可以捕获到的:
 //文章地址:https://mp.weixin.qq.com/s/VDxHUPy6T2PhM_viCvRb8w

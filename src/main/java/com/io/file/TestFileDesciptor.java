@@ -1,6 +1,8 @@
 package com.io.file;
 
-import com.xiaoleilu.hutool.date.TimeInterval;
+
+
+import cn.hutool.core.date.TimeInterval;
 
 import java.io.*;
 import java.lang.reflect.Field;
