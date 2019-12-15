@@ -20,6 +20,7 @@ public class TestFutureTask {
 
 	        executor.submit(futureTask);
 
+
 	        executor.shutdown();
 
 	         
@@ -82,7 +83,7 @@ public class TestFutureTask {
 
 	        System.out.println("子线程在进行计算");
 
-	        Thread.sleep(5000000);
+	        Thread.sleep(5000);
 
 	        int sum = 0;
 

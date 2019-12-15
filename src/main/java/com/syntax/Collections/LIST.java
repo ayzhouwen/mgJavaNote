@@ -74,6 +74,7 @@ public class LIST {
         double nextDouble = Math.random();
         System.out.println(list.indexOf(nextDouble));
 
+
     }
 
     //抽象抽象类转换
