@@ -44,8 +44,8 @@ public class LocalVarGc {
 
     public static void main(String[] args) {
         LocalVarGc ins=new LocalVarGc();
-       // ins.localVarGc1();
-        ins.localVarGc2();
+       ins.localVarGc1();
+       // ins.localVarGc2();
     }
 
 
