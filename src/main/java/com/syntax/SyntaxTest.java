@@ -36,6 +36,11 @@ class SyntaxTest {
         System.out.println(EnumSet.of(Color.green));  ;
         System.out.println(Color.getName(1));  ;
 
+
+
+
+
+
     }
 
 
