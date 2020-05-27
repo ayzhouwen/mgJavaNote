@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.lock;
 
 //读写锁测试
 //来源:http://www.cnblogs.com/liuling/p/2013-8-21-03.html

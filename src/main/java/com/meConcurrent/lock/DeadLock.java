@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.lock;
 
 //死锁测试
 public class DeadLock {

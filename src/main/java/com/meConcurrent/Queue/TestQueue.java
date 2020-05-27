@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.Queue;
 
 import java.util.LinkedList;
 //这是一道面试题,题目:下面的代码在绝大部分时间内都运行很正常,请问在什么情况下会出现问题?问题的根源在哪里
