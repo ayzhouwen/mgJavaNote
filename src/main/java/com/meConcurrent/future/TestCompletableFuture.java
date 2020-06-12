@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TestCompletableFuture {
 
@@ -20,7 +18,6 @@ public class TestCompletableFuture {
     public  void thenCombine(){
         long stime=System.currentTimeMillis();
         try {
-            CompletableFuture
 
             CompletableFuture<String> result=CompletableFuture.supplyAsync(()->{
                 try {
@@ -76,9 +73,8 @@ public class TestCompletableFuture {
     }
 
 
-
-
-    public  void allOf(){
+    public void testAllOf() {
+        long stime = System.currentTimeMillis();
         List<CompletableFuture<Map<String,Object>>> futuresList=new ArrayList<>();
         for (int i = 0; i <10 ; i++) {
             int finalI = i;
@@ -88,48 +84,52 @@ public class TestCompletableFuture {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                System.out.println("第一个CF");
                 Map<String,Object> data=new HashMap<>();
                 data.put("name","张"+ finalI);
                 data.put("age", finalI);
                 return data;
             });
-
             futuresList.add(result);
         }
-
-//        CompletableFuture<Integer> one = CompletableFuture.supplyAsync(() -> 1);
-//        CompletableFuture<Integer> two = CompletableFuture.supplyAsync(() -> 2);
-//        CompletableFuture<Integer> three = CompletableFuture.supplyAsync(() -> 3);
-//        CompletableFuture<Integer> four = CompletableFuture.supplyAsync(() -> 4);
-//        CompletableFuture<Integer> five = CompletableFuture.supplyAsync(() -> 5);
-//        CompletableFuture<Integer> six = CompletableFuture.supplyAsync(() -> 6);
-//
-//        CompletableFuture<Void> voidCompletableFuture = CompletableFuture.allOf(one, two, three, four, five, six);
-//        voidCompletableFuture.thenApply(v->{
-//            return Stream.of(one,two,three,four, five, six)
-//                    .map(CompletableFuture::join)
-//                    .collect(Collectors.toList());
-//        }).thenAccept(System.out::println);
-
-
-        String[] arr;
-        arr=new  String[3];
-        CompletableFuture<Void> allFuturesResult =
-                CompletableFuture.allOf(arr[0]);
-         allFuturesResult.thenApply(v ->
-                futuresList.stream().
-                        map(future -> future.join()).
-                        collect(Collectors.toList())
-        );
+        this.listAllOf(futuresList);
+        System.out.println(MyDateUtil.execTime("testAllOf 耗时", stime));
     }
 
-    public static void main(String[] args) {
-        TestCompletableFuture tcf=new TestCompletableFuture();
-        for (int i = 0; i <1 ; i++) {
-            tcf.thenCombine();
-        }
+    //多任务异步全部执行完毕方式1:
+    public <T> void listAllOf(List<CompletableFuture<T>> futuresList) {
+//        CompletableFuture<Void> allFuturesResult =
+//                CompletableFuture.allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]));
+//                 allFuturesResult.join();
+        futuresList.forEach(e -> {
+            System.out.println(e.join());
+        });
 
+        futuresList.forEach(e -> {
+            System.out.println(e.join());
+        });
+
+//        futuresList.forEach(e->{
+//            System.out.println(e.join());});
+
+    }
+
+
+    //多任务异步全部执行完毕方式2 ,直接遍历list,然后执行join方法
+    public <T> void listAllOf2(List<CompletableFuture<T>> futuresList) {
+        List list = futuresList.stream().map(e -> {
+            Object o = e.join();
+            //  System.out.println(o);
+            return o;
+        }).collect(Collectors.toList());
+        System.out.println(list);
+
+    }
+    public static void main(String[] args) {
+        TestCompletableFuture tcf = new TestCompletableFuture();
+//        for (int i = 0; i <1 ; i++) {
+//            tcf.thenCombine();
+//        }
+
+        tcf.testAllOf();
     }
 }
