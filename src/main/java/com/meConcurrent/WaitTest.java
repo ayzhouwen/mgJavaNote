@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 //http://blog.csdn.net/hel_wor/article/details/51195204
     //关于wait等待异常的问题,java.lang.IllegalMonitorStateException
+    //对象的wait和notifyAll方法必须用 synchronized 方法包住
 public class WaitTest {
     private  static ArrayList<Integer> list=new ArrayList<>();
 
@@ -43,10 +44,19 @@ public class WaitTest {
       Runnable runnable2=new Runnable() {
           @Override
           public void run() {
-                synchronized (list){
-                    list.add(6666);
-                    list.notifyAll(); //this.notifyAll();这会报错,因为main线程没有持有list锁对象
-                }
+              while (true){
+                  synchronized (list){
+                      list.add(6666);
+                      list.notifyAll(); //this.notifyAll();这会报错,因为main线程没有持有list锁对象
+                  }
+
+                  try {
+                      Thread.sleep(5000);
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
+                  }
+              }
+
           }
       };
         Thread thead2=new Thread(runnable2);

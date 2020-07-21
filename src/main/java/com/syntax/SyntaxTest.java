@@ -35,6 +35,13 @@ class SyntaxTest {
         System.out.println(Color.valueOf("green"));  ;
         System.out.println(EnumSet.of(Color.green));  ;
         System.out.println(Color.getName(1));  ;
+        Integer ia=1830;
+        Integer ib=1830;
+
+        Integer xa=14;
+        Integer xb=14;
+        System.out.println(ia==ib);
+        System.out.println(xa==xb);
 
 
 

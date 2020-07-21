@@ -101,11 +101,11 @@ public class TestCompletableFuture {
 //                CompletableFuture.allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]));
 //                 allFuturesResult.join();
         futuresList.forEach(e -> {
-            System.out.println(e.join());
+            System.out.println("遍历获取结果:"+e.join());
         });
 
         futuresList.forEach(e -> {
-            System.out.println(e.join());
+            System.out.println("遍历获取结果2:"+e.join());
         });
 
 //        futuresList.forEach(e->{
