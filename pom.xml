@@ -96,7 +96,11 @@
       <artifactId>hutool-all</artifactId>
       <version>5.1.0</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.10</version>
+    </dependency>
 <!--动态字节码-->
     <dependency>
       <groupId>cglib</groupId>

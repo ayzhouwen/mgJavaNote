@@ -46,7 +46,21 @@ public class MAP {
 
         System.out.println(map);
     }
+
+    //测试Map key 的类型long是否和Long一致
+    //结果long和Long 在为key时,只要数值一样,使用上就没问题
+    public static  void testLongMap(){
+        Map<Long,Object> longmap=new HashMap<>();
+        Long L1=new Long(9999);
+        long L2=9999;
+        longmap.put(L1,1);
+        longmap.put(L2,2);
+        //此时map里只有一个元素
+        System.out.println(longmap.size());
+        System.out.println(longmap.get(L1)==longmap.get(L2));
+    }
     public static void main(String[] args) {
-        testMapEQ();
+        //testMapEQ();
+        testLongMap();
     }
 }
