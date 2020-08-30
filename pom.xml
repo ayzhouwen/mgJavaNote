@@ -12,6 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <exec.mainClass>com.socket.udp.demo1.UDPServer</exec.mainClass>
   </properties>
 
   <build>
@@ -24,6 +25,31 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
+      </plugin>
+
+<!--      此处配置可以将打包成可执行jar包,方便调试部署,启动类可以随意指定-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${exec.mainClass}</mainClass>
+                </transformer>
+              </transformers>
+              <artifactSet>
+              </artifactSet>
+              <!--<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>-->
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -114,8 +140,25 @@
       <version>3.21.0-GA</version>
     </dependency>
 
-
+<!--    日志打印-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>1.1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.1.11</version>
+    </dependency>
 
   </dependencies>
+
+
 </project>
 
