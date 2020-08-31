@@ -8,8 +8,9 @@ import java.net.*;
 /**
  * 参考:https://www.liaoxuefeng.com/wiki/1252599548343744/1319099802058785
  * 测试udp最大发送<64*1024-29个字节,否则再大的话不让发送
- * 实际与阿里云udp服务端发送1000个包时,发到几百个会有丢包,延迟,本地虚拟机没有问题,可能是阿里云带宽限制问题
- * 如果udp的包大于1000多的话,ip层会进行分包传输给对方,因为ip层不是可靠协议,所以会丢包,导致报错
+ * 实际与1m带宽阿里云udp服务端发送1000个包时,发到几百个会有丢包,延迟,本地虚拟机没有问题,在公司局域网测试也没有问题,发送一万次也没有丢包,应该是是阿里云带宽限制问题
+ * 在公司服务器上就行iftop   -nNBP -m 1KB -f ' port 8000' 流量统计,发现1000次udp发送峰值可以达到300kb/s,可能被阿里云的流量限制了
+ * 如果udp的包大于1000多的话,ip层会进行分包传输给对方,因为ip层不是可靠协议,所以可能会丢包,导致报错
  */
 @Slf4j
 public class UDPClient {
@@ -18,7 +19,7 @@ public class UDPClient {
             DatagramSocket ds = null;
             ds = new DatagramSocket();
             ds.setSoTimeout(10000);
-            ds.connect(InetAddress.getByName("10.168.136.128"), 8000); // 连接指定服务器和端口
+            ds.connect(InetAddress.getByName("192.168.51.80"), 8000); // 连接指定服务器和端口
 
 
 // 发送:
