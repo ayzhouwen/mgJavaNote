@@ -1,9 +1,11 @@
-package com.socket;
+package com.socket.tcp.demo1;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * 此demo是标准的阻塞io+多线程处理
+ */
 public class TimeServer {
 		public static void main(String[] args) {
 			int port=8084;

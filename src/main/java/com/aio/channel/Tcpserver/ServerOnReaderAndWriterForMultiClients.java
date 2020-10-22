@@ -16,7 +16,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * 此aio没有tcp流的粘包解决,粘包课查看nio包的ChannelSessoin类的实现,参考的是zk的
+ */
 public class ServerOnReaderAndWriterForMultiClients {
     static final int DEFAULT_PORT = 7777;
     static final String IP = "127.0.0.1";
