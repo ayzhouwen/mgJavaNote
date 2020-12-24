@@ -16,7 +16,7 @@ public class BufferCompareWithEquals {
 					buffer2.put(s1.charAt(i));
 				}
 				buffer2.put('s');
-				buffer2.put('虎');
+				buffer2.put("虎");
 				 System.out.println(buffer1.compareTo(buffer2));
 				//调用flip方法后limit 为7
 				buffer1.flip();
