@@ -3,13 +3,13 @@ package com.util;
 import java.nio.ByteBuffer;
 
 /**
- * ×Ö½ÚÏà¹Ø¹Ü¾Ö
+ * å­—èŠ‚ç›¸å…³ç®¡å±€
  */
 public class ByteUtil
 {
 
 	/**
-	 * int×ªĞ¡¶Ë´æ´¢
+	 * intè½¬å°ç«¯å­˜å‚¨
 	 * @param a
 	 * @param len
 	 * @return
@@ -26,7 +26,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * int×ª´ó¶Ë´æ´¢
+	 * intè½¬å¤§ç«¯å­˜å‚¨
 	 * @param a
 	 * @param len
 	 * @return
@@ -42,8 +42,29 @@ public class ByteUtil
 		return data;
 	}
 
+
+
 	/**
-	 * ByteBuffe×ªByteArray
+	 * ç”¨äºå»ºç«‹åå…­è¿›åˆ¶å­—ç¬¦çš„è¾“å‡ºçš„å¤§å†™å­—ç¬¦æ•°ç»„
+	 */
+	private static final char[] toDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+	public static String encodeHex(byte[] data) {
+		final int len = data.length;
+		final char[] out = new char[3*len];//len*3
+		// two characters from the hex value.
+		for (int i = 0, j = 0; i < len; i++) {
+			out[j++] = toDigits[(0xF0 & data[i]) >>> 4];// é«˜ä½
+			out[j++] = toDigits[0x0F & data[i]];// ä½ä½
+			out[j++]=32; //æ·»åŠ ç©ºæ ¼
+
+
+		}
+		return new String(out);
+	}
+
+	/**
+	 * ByteBuffeè½¬ByteArray
 	 * @return
 	 */
 	public static byte[] ByteBuffe2ByteArray(ByteBuffer buffer){
@@ -53,29 +74,9 @@ public class ByteUtil
 		return array;
 	}
 
-	/**
-	 * ÓÃÓÚ½¨Á¢Ê®Áù½øÖÆ×Ö·ûµÄÊä³öµÄ´óĞ´×Ö·ûÊı×é
-	 */
-	private static final char[] toDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
-	public static String encodeHex(byte[] data) {
-		final int len = data.length;
-		final char[] out = new char[3*len];//len*3
-		// two characters from the hex value.
-		for (int i = 0, j = 0; i < len; i++) {
-			out[j++] = toDigits[(0xF0 & data[i]) >>> 4];// ¸ßÎ»
-			out[j++] = toDigits[0x0F & data[i]];// µÍÎ»
-			out[j++]=32; //Ìí¼Ó¿Õ¸ñ
-
-
-		}
-		return new String(out);
-	}
-
 	public static void main(String[] args) {
 		int b=2300;
 		System.out.println((byte)230);
 		System.out.println(encodeHex(num2LittleEndian(b,1)));
-
 	}
 }

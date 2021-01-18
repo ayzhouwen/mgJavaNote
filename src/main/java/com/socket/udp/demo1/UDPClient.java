@@ -1,5 +1,8 @@
 package com.socket.udp.demo1;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.FileUtil;
+import com.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -16,17 +19,19 @@ import java.net.*;
 public class UDPClient {
     public static void sendudp(){
         try {
+
             DatagramSocket ds = null;
             ds = new DatagramSocket();
             ds.setSoTimeout(10000);
-            ds.connect(InetAddress.getByName("192.168.51.80"), 8000); // 连接指定服务器和端口
+            ds.connect(InetAddress.getByName(ConfigUtil.getConfigValue("udpServerIp")),
+                    Convert.toInt(ConfigUtil.getConfigValue("udpServerPort"))); // 连接指定服务器和端口
 
 
 // 发送:
             StringBuilder sb=new StringBuilder();
 //            for (int i = 0; i <64*1024-29 ; i++) {
             for (int i = 0; i <1024; i++) {
-                sb.append("1");
+                sb.append(i+",");
             }
 //        byte[] data = "Hello".getBytes();
             byte[] data = sb.toString().getBytes();
@@ -43,14 +48,14 @@ public class UDPClient {
             String resp = new String(packet.getData(), packet.getOffset(), packet.getLength());
             log.info("接收服务端数据:"+resp);
             ds.disconnect();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("udp发送异常:",e);
         }
     }
 
 
     public static void main(String[] args) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             sendudp();
             log.info("完成第"+i+"次发送udp");
         }

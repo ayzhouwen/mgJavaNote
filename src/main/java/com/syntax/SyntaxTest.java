@@ -1,53 +1,51 @@
 package com.syntax;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSON;
+import com.util.ByteUtil;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author admin
  */
-//临时随手代码测试类,可以忽略次类
+//临时随手代码测试类,可以忽略次类d
+    @Slf4j
 class SyntaxTest {
 
     //   private static final Unsafe unsafe = Unsafe.getUnsafe();
-    public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, ScriptException {
-//        Date now = DateUtil.date();
-//        System.out.println( now);
-//        Integer n=-3;
-//        //下一天
-//        System.out.println("明天"+ DateUtil.offsetDay(now,n));      ;
-//        //下一周
-//        System.out.println("下一周"+DateUtil.offsetWeek(now,n));
-//        //下一个月
-//        System.out.println("下一个月"+DateUtil.offsetMonth(now,n));
-//        //下一个季度
-//        System.out.println("下一个季度"+DateUtil.offsetMonth(now,3*n));
-//        //下一年
-//        System.out.println("下一年:"+DateUtil.offsetMinute(now,n));
-//
-//        System.out.println(DateUtil.parseDateTime("2018-1-13 00:00:01").isAfterOrEquals(DateUtil.parseDateTime("2018-1-13 10:00:00")));
-//
-//        System.out.println("2018-01-19 10:15:18abc".substring(0,10));
-//        ReUtil.replaceAll("asdasd", "\\.", "/");
+    public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, ScriptException, InterruptedException {
+        List<Person> list=new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Person p=new Person();
+            p.setAge(i);
+            p.setName(RandomUtil.randomInt(1,5)+"");
+            list.add(p);
+        }
+//        Map<String, List<Person>> groupmap =
+//                list.stream().collect(Collectors.groupingBy(Person::getName));
+//        log.info(JSON.toJSONString(groupmap ));
 
-        System.out.println(Color.valueOf("green"));  ;
-        System.out.println(EnumSet.of(Color.green));  ;
-        System.out.println(Color.getName(1));  ;
-        Integer ia=1830;
-        Integer ib=1830;
+        log.info(JSON.toJSONString(list));
+        list.remove(0);
+        list.remove(0);
+        list.remove(0);
+        log.info(JSON.toJSONString(list));
 
-        Integer xa=14;
-        Integer xb=14;
-        System.out.println(ia==ib);
-        System.out.println(xa==xb);
-
-
-
-
-
-
+       String json= FileUtil.readUtf8String("./myconfig.json");
+        System.out.println(json);
 
     }
 
@@ -55,6 +53,7 @@ class SyntaxTest {
 
 }
 
+@Data
 class  Person implements Serializable {
 
     public  int age;

@@ -36,7 +36,12 @@ public class UDPServer {
                 String s = new String(packet.getData(), packet.getOffset(), packet.getLength(), StandardCharsets.UTF_8);
                 log.info("收到第"+receiveNum+"个包,客户端数据:"+s);
                 // 发送数据:
-                byte[] data = "ACK".getBytes(StandardCharsets.UTF_8);
+                StringBuilder sb=new StringBuilder();
+//            for (int i = 0; i <64*1024-29 ; i++) {
+                for (int i = 0; i <500; i++) {
+                    sb.append(i+",");
+                }
+                byte[] data = sb.toString().getBytes();
                 packet.setData(data);
                 ds.send(packet);
                 sendNum++;
