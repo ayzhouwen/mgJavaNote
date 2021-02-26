@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 @Slf4j
 public class TestCompletableFuture {
@@ -79,9 +80,10 @@ public class TestCompletableFuture {
 
     //注意代码中的线程池只是方便测试,生产环境线程池必须为静态变量,不能是局部变量,除非自己手动卸载线程池
     public void testAllOf() {
+        ThreadPoolExecutor poolExecutor= (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
         long stime = System.currentTimeMillis();
         List<CompletableFuture<Map<String,Object>>> futuresList=new ArrayList<>();
-        for (int i = 0; i <10 ; i++) {
+        for (int i = 0; i <300 ; i++) {
             int finalI = i;
             CompletableFuture<Map<String,Object>> result=CompletableFuture.supplyAsync(()->{
                 try {
@@ -93,26 +95,25 @@ public class TestCompletableFuture {
                 data.put("name","张"+ finalI);
                 data.put("age", finalI);
                 return data;
-            }, Executors.newFixedThreadPool(8));
+            }, poolExecutor);
             futuresList.add(result);
         }
-        this.listAllOf(futuresList);
+        this.listAllOf(futuresList,poolExecutor);
         log.info(MyDateUtil.execTime("testAllOf 耗时", stime)+"数据长度:"+futuresList.size());
     }
 
     //多任务异步全部执行完毕方式1:
-    public <T> void listAllOf(List<CompletableFuture<T>> futuresList) {
+    public <T> void listAllOf(List<CompletableFuture<T>> futuresList,ThreadPoolExecutor poolExecutor) {
 //        CompletableFuture<Void> allFuturesResult =
 //                CompletableFuture.allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]));
 //                 allFuturesResult.join();
 
-
-
         futuresList.forEach(e -> {
             e.join();
         });
-
-
+        if (poolExecutor!=null){
+            poolExecutor.shutdownNow();
+        }
     }
 
 
@@ -132,44 +133,26 @@ public class TestCompletableFuture {
 //            tcf.thenCombine();
 //        }
 
-        tcf.testAllOf();
-        try {
-            Thread.sleep(1000*60*1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
         new Thread(()->{
             tcf.testAllOf();
         }).start();
-        try {
-            Thread.sleep(1000*60*1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
         new Thread(()->{
             tcf.testAllOf();
         }).start();
-        try {
-            Thread.sleep(1000*60*1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
         new Thread(()->{
             tcf.testAllOf();
         }).start();
-        try {
-            Thread.sleep(1000*60*1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         new Thread(()->{
             tcf.testAllOf();
         }).start();
-        try {
-            Thread.sleep(1000*60*1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         try {
             Thread.sleep(1000*60*10);
         } catch (InterruptedException e) {
