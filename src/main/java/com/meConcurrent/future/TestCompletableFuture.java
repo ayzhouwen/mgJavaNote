@@ -1,20 +1,24 @@
 package com.meConcurrent.future;
 
 import com.util.MyDateUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
+@Slf4j
 public class TestCompletableFuture {
 
 
     //注意 如果并发任务中有任意一处抛出异常,那么调用者很容易挂掉,必须catch住异常,如果调用线程是核心线会瞬间导致其崩溃,catch住,catch住,catch住
 
     //执行完任务的时间基本上等于最长任务的执行时间
+
+    //注意生产环境尽量为为CompletableFuture指定不同的线程池,否则会造成只使用一个线程池问题,很容易造成业务堆积
     public  void thenCombine(){
         long stime=System.currentTimeMillis();
         try {
@@ -26,13 +30,13 @@ public class TestCompletableFuture {
                     e.printStackTrace();
                 }
 
-                System.out.println("第一个CF");
+                log.info("第一个CF");
                 return "hello1";
             }).thenCombine(CompletableFuture.supplyAsync(() -> {
 //            if (true){
 //                throw new RuntimeException("故意异常");
 //            }
-                System.out.println("第二个CF");
+                log.info("第二个CF");
                 try {
                     Thread.sleep(2000L);
                 } catch (InterruptedException e) {
@@ -41,13 +45,13 @@ public class TestCompletableFuture {
 
                 return "hello2";
             }), (t, u) -> {
-                System.out.println("组合:"+t+","+u);
+                log.info("组合:"+t+","+u);
                 return t + " " + u;
             }).thenCombine(CompletableFuture.supplyAsync(() -> {
 //            if (true){
 //                throw new RuntimeException("故意异常");
 //            }
-                System.out.println("第三个CF");
+                log.info("第三个CF");
                 try {
                     Thread.sleep(2000L);
                 } catch (InterruptedException e) {
@@ -57,22 +61,23 @@ public class TestCompletableFuture {
                 return "hello3";
             }), (t1, u2) -> {
 
-                System.out.println("组合2:"+t1+","+u2);
+                log.info("组合2:"+t1+","+u2);
                 return t1 + " " + u2;
 
 
             });
 
-            System.out.println("最终值:"+result.get());
+            log.info("最终值:"+result.get());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        System.out.println(MyDateUtil.execTime("thenCombine 耗时",stime));
+        log.info(MyDateUtil.execTime("thenCombine 耗时",stime));
     }
 
 
+    //注意代码中的线程池只是方便测试,生产环境线程池必须为静态变量,不能是局部变量,除非自己手动卸载线程池
     public void testAllOf() {
         long stime = System.currentTimeMillis();
         List<CompletableFuture<Map<String,Object>>> futuresList=new ArrayList<>();
@@ -80,7 +85,7 @@ public class TestCompletableFuture {
             int finalI = i;
             CompletableFuture<Map<String,Object>> result=CompletableFuture.supplyAsync(()->{
                 try {
-                    Thread.sleep(3000L);
+                    Thread.sleep(1000L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,11 +93,11 @@ public class TestCompletableFuture {
                 data.put("name","张"+ finalI);
                 data.put("age", finalI);
                 return data;
-            });
+            }, Executors.newFixedThreadPool(8));
             futuresList.add(result);
         }
         this.listAllOf(futuresList);
-        System.out.println(MyDateUtil.execTime("testAllOf 耗时", stime));
+        log.info(MyDateUtil.execTime("testAllOf 耗时", stime)+"数据长度:"+futuresList.size());
     }
 
     //多任务异步全部执行完毕方式1:
@@ -100,16 +105,13 @@ public class TestCompletableFuture {
 //        CompletableFuture<Void> allFuturesResult =
 //                CompletableFuture.allOf(futuresList.toArray(new CompletableFuture[futuresList.size()]));
 //                 allFuturesResult.join();
-        futuresList.forEach(e -> {
-            System.out.println("遍历获取结果:"+e.join());
-        });
+
+
 
         futuresList.forEach(e -> {
-            System.out.println("遍历获取结果2:"+e.join());
+            e.join();
         });
 
-//        futuresList.forEach(e->{
-//            System.out.println(e.join());});
 
     }
 
@@ -118,10 +120,10 @@ public class TestCompletableFuture {
     public <T> void listAllOf2(List<CompletableFuture<T>> futuresList) {
         List list = futuresList.stream().map(e -> {
             Object o = e.join();
-            //  System.out.println(o);
+            //  log.info(o);
             return o;
         }).collect(Collectors.toList());
-        System.out.println(list);
+//        log.info(list);
 
     }
     public static void main(String[] args) {
@@ -131,5 +133,47 @@ public class TestCompletableFuture {
 //        }
 
         tcf.testAllOf();
+        try {
+            Thread.sleep(1000*60*1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(()->{
+            tcf.testAllOf();
+        }).start();
+        try {
+            Thread.sleep(1000*60*1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(()->{
+            tcf.testAllOf();
+        }).start();
+        try {
+            Thread.sleep(1000*60*1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(()->{
+            tcf.testAllOf();
+        }).start();
+        try {
+            Thread.sleep(1000*60*1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(()->{
+            tcf.testAllOf();
+        }).start();
+        try {
+            Thread.sleep(1000*60*1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(1000*60*10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
