@@ -20,6 +20,8 @@ public class TestCompletableFuture {
     //执行完任务的时间基本上等于最长任务的执行时间
 
     //注意生产环境尽量为为CompletableFuture指定不同的线程池,否则会造成只使用一个线程池问题,很容易造成业务堆积
+
+    //注意 如果futuresList遍历时执行当前的futures发生异常,代码肯定会异常,代码就此中断,所以join后下执行函数一定要catch 异常,不要干扰其他任务数据的读取
     public  void thenCombine(){
         long stime=System.currentTimeMillis();
         try {
