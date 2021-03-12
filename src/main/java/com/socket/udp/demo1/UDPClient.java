@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 参考:https://www.liaoxuefeng.com/wiki/1252599548343744/1319099802058785
@@ -17,14 +20,15 @@ import java.net.*;
  */
 @Slf4j
 public class UDPClient {
-    public static void sendudp(){
+    private static ExecutorService poolExecutor=Executors.newFixedThreadPool(16);
+    public static void sendudp(String ip,int port){
         try {
 
             DatagramSocket ds = null;
             ds = new DatagramSocket();
             ds.setSoTimeout(10000);
-            ds.connect(InetAddress.getByName(ConfigUtil.getConfigValue("udpServerIp")),
-                    Convert.toInt(ConfigUtil.getConfigValue("udpServerPort"))); // 连接指定服务器和端口
+            ds.connect(InetAddress.getByName(ip),port
+                    ); // 连接指定服务器和端口
 
 
 // 发送:
@@ -47,7 +51,7 @@ public class UDPClient {
 
             String resp = new String(packet.getData(), packet.getOffset(), packet.getLength());
             log.info("接收服务端数据:"+resp);
-            ds.disconnect();
+            ds.close();
         } catch (Exception e) {
             log.error("udp发送异常:",e);
         }
@@ -55,9 +59,13 @@ public class UDPClient {
 
 
     public static void main(String[] args) {
+        String ip=ConfigUtil.getConfigValue("udpServerIp");
+        int port=Convert.toInt(ConfigUtil.getConfigValue("udpServerPort"));
         for (int i = 0; i < 1000000; i++) {
-            sendudp();
-            log.info("完成第"+i+"次发送udp");
+            poolExecutor.execute(()->{
+                sendudp(ip,port);
+            });
+
         }
     }
 
