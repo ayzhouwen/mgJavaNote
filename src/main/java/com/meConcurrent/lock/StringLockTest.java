@@ -26,10 +26,7 @@ public class StringLockTest {
 
 
         for (int i = 0; i <sumCount ; i++) {
-            //不调用set方法,默认走常量池,用 name作为锁key,线程安全
-            Req req=new Req("abc".intern());
-            //new String不走常量池,用name字段 作为锁key,线程不安全
-            req.setName(new String("abc"));
+            Req req=new Req(new String("abc"));
             pool.execute(new MyRunable(req));
         }
         try {
@@ -59,7 +56,7 @@ public class StringLockTest {
 
         @Override
         public void run() {
-            //字符串作为锁key时,一定要加上intern,即使name字段是new 出来的,调用此方法后,会从常量池里取,线程安全
+            //字符串作为锁key时,一定要加上intern,即使name字段是new 出来的,调用此方法后,会从常量池里取,从而保证线程安全
             synchronized (req.name.intern()){
                 sum++;
                 log.info(sum +"");
