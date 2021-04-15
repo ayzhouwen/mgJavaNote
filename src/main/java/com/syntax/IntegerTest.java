@@ -1,8 +1,16 @@
 package com.syntax;
 
+import com.alibaba.fastjson.JSON;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class IntegerTest {
     public static void main(String[] args) {
-        IntegerTrap1();
+//        IntegerTrap1();
+        IntegerTest test=new IntegerTest();
+        test.TestObjChange();
     }
 
     /**
@@ -23,5 +31,30 @@ public class IntegerTest {
         System.out.println(i >= a);
         //拆箱操作,有时间跟踪class字节码
         System.out.println(i >= j);
+    }
+
+
+    /**
+     * 测试将对象赋值给新的Integer后,改变原对象值,是否会一起变化
+     */
+    public   void  TestObjChange(){
+        Person person=new Person();
+        person.setAge(2500);
+        person.setName("华为");
+        Integer v=person.getAge();
+        Integer w=v;
+        String name= person.name;
+        person.setAge(999);
+        person.setName("小米");
+        v=888;
+        log.info("v:"+v.toString()+name);
+        log.info(JSON.toJSONString(person));
+        log.info("w:"+w);
+    }
+
+    @Data
+    private class  Person{
+        public  Integer age;
+        public String name;
     }
 }
