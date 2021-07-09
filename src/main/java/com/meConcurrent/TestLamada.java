@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 //注意:函数接口只能定义一个正常的方法名,否则在用这个函数接口会提示函数接口无效
 
 @FunctionalInterface
@@ -34,6 +35,7 @@ public static void main(String[] args) {
 	IMyLmda1 r1=(String e) -> {System.out.println("Hello Lambda!");};
 
 	tl.PThis(  (IMyLmda1) -> {System.out.println("Hello Lambda!");} );
+	Function<Integer, Integer> name = e -> e * 2;
 	
 }
 

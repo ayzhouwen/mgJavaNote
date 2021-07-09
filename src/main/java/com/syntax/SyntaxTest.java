@@ -1,8 +1,10 @@
 package com.syntax;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.util.ByteUtil;
 import lombok.Data;
@@ -12,10 +14,7 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,25 +26,28 @@ class SyntaxTest {
 
     //   private static final Unsafe unsafe = Unsafe.getUnsafe();
     public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, ScriptException, InterruptedException {
+
+        // creating maps
+        TreeMap<Integer, Person> treemap = new TreeMap<Integer, Person>();
+        SortedMap<Integer, Person> treemapincl = new TreeMap<Integer, Person>();
+        SortedMap<Integer, Person> treemapincl2 = new TreeMap<Integer, Person>();
+
+        // populating tree map
         List<Person> list=new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Person p=new Person();
-            p.setAge(i);
-            p.setName(RandomUtil.randomInt(1,5)+"");
-            list.add(p);
+        for (int i = 0; i <10 ; i++) {
+            Person person=new Person();
+            person.setAge(i);
+            list.add(person);
         }
-//        Map<String, List<Person>> groupmap =
-//                list.stream().collect(Collectors.groupingBy(Person::getName));
-//        log.info(JSON.toJSONString(groupmap ));
+        treemap.put(2, list.get(2));
+        treemap.put(26, list.get(1));
+        treemap.put(44, list.get(3));
+        treemap.put(88, list.get(6));
+        treemap.put(5, list.get(5));
 
-        log.info(JSON.toJSONString(list));
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        log.info(JSON.toJSONString(list));
-
-       String json= FileUtil.readUtf8String("./myconfig.json");
-        System.out.println(json);
+        System.out.println("Getting tail map");
+        treemapincl=treemap.headMap(17);
+        System.out.println("Tail map values: "+treemapincl);
 
     }
 
