@@ -49,6 +49,8 @@ class SyntaxTest {
         treemapincl=treemap.headMap(17);
         System.out.println("Tail map values: "+treemapincl);
 
+        log.info("测试github");
+
     }
 
 
