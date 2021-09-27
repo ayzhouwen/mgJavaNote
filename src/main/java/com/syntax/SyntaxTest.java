@@ -22,6 +22,8 @@ class SyntaxTest {
                 throw  new PingCollectException("RPC执行错误",PingCollectException.RPC_ERRO);
             }
 
+        log.info("测试github");
+
     }
 
 
