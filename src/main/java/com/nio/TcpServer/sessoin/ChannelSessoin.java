@@ -5,12 +5,14 @@ import com.nio.TcpServer.util.BuffUtil;
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.CharacterCodingException;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
+/**
+ * 注意,实际的协议中得加上消息前缀的权限认证标志,否则瞎造的数据容易造成直接分配个特别大的内存,造成对内和对外内存的溢出
+ */
 public class ChannelSessoin {
 
     final SocketChannel sock;
@@ -27,7 +29,7 @@ public class ChannelSessoin {
         this.sk = sk;
         sock.socket().setTcpNoDelay(true);
         sock.socket().setSoLinger(false,-1);
-        sock.socket().setReceiveBufferSize(1024*1024);
+        sock.socket().setReceiveBufferSize(1024*8);
     }
  public    void doIo(SelectionKey k) throws InterruptedException {
         try {
