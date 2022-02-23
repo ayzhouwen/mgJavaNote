@@ -5,7 +5,11 @@ import sun.misc.SignalHandler;
 
 import java.util.concurrent.TimeUnit;
 
-//测试优雅关机
+
+/**
+ * 测试优雅关机
+ * win上如果是在任务栏里直接结束进程,test1和test2都不会走回调,在IDE里点击红色的按钮,会进入test1和test2都会进入回调
+ */
 public class ShutdownHookTest {
     //ShutdownHook方式
     public static void test1(){
@@ -22,7 +26,7 @@ public class ShutdownHookTest {
         },"优雅关机"));
 
         try {
-            TimeUnit.SECONDS.sleep(7);
+            TimeUnit.SECONDS.sleep(60);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -42,16 +46,18 @@ public class ShutdownHookTest {
                     e.printStackTrace();
                 }
                 System.out.println("优雅关机:Signal结束");
+                //必须加入此代码,否则程序无法退出
+                System.exit(0);
             }
         });
 
         try {
-            TimeUnit.SECONDS.sleep(7);
+            TimeUnit.SECONDS.sleep(60);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
     public static void main(String[] args) throws InterruptedException {
-        ShutdownHookTest.test2();
+        ShutdownHookTest.test1();
     }
 }
