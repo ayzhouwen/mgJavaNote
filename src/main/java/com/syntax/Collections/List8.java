@@ -8,12 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //这里主要是list的一些新特性
 @Slf4j
@@ -77,6 +76,27 @@ public class List8 {
         log.info(JSON.toJSONString(groupmap ));
     }
 
+    /**
+     * JDK8 分组和元素判空
+     */
+    void jdk8GroupByNull(){
+        Person p1=new Person();p1.setAge(12);p1.setName("张1");
+        Person p2=new Person();p2.setAge(15);p2.setName("张2");
+        Person p3=new Person();p3.setAge(15);p3.setName("张3");
+        Person p4=new Person();p4.setAge(16);p4.setName("张4");
+        Person p5=new Person();p5.setAge(12);p5.setName("张5");
+        Person p6=new Person();p6.setAge(null);p6.setName("张6");
+        Person p7=new Person();
+        List<Person> list= Stream.of(p1,p2,p3,p4,p5,p6,p7).collect(Collectors.toList());
+        Map map=list.stream().filter(e->{if (e.getAge()==null){
+            System.out.println("年龄不能为空,参数:"+ JSON.toJSONString(e));
+            return false;
+        }else {
+            return true;
+        }})
+                .collect(Collectors.groupingBy(Person::getAge));
+        System.out.println(map);
+    }
     public static void main(String[] args) {
         List8 list8=new List8();
         list8.editElement();
@@ -86,7 +106,7 @@ public class List8 {
     @Data
     class  Person implements Serializable {
 
-        public  int age;
+        public  Integer age;
         public String name;
 
     }
