@@ -1,12 +1,9 @@
 package com.meConcurrent;
 
-import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 线程池引用局部变量测试,结论:不会出现并发问题,因为不涉及到修改,如果修改编译直接报错
@@ -31,7 +28,7 @@ public class ThreadPoolVarTest {
             t.submit(()->{
                 System.out.println("i值:"+ finalI);
                 String [] arr= str.split(",");
-                System.out.println(Thread.currentThread().getName()+"-"+ JSON.toJSONString(arr));
+                System.out.println(Thread.currentThread().getName()+"-"+ JSONUtil.toJsonStr(arr));
             });
         }
         try {

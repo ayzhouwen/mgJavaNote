@@ -2,7 +2,7 @@ package com.syntax.Collections;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,9 +50,9 @@ public class List8 {
                 //e.data=9999; 可以实现对元素的修改
            return e.childrenList.stream().filter(sue->2==sue.data).count()>0;
         }).findFirst().orElse(null);
-        System.out.println(JSON.toJSONString(list));
-        System.out.println(JSON.toJSONString(map));
-        System.out.println(JSON.toJSONString(find));
+        System.out.println(JSONUtil.toJsonStr(list));
+        System.out.println(JSONUtil.toJsonStr(map));
+        System.out.println(JSONUtil.toJsonStr(find));
 
 
 
@@ -73,7 +73,7 @@ public class List8 {
         }
         Map<String, List<Person>> groupmap =
                 list.stream().collect(Collectors.groupingBy(Person::getName));
-        log.info(JSON.toJSONString(groupmap ));
+        log.info(JSONUtil.toJsonStr(groupmap ));
     }
 
     /**
@@ -89,7 +89,7 @@ public class List8 {
         Person p7=new Person();
         List<Person> list= Stream.of(p1,p2,p3,p4,p5,p6,p7).collect(Collectors.toList());
         Map map=list.stream().filter(e->{if (e.getAge()==null){
-            System.out.println("年龄不能为空,参数:"+ JSON.toJSONString(e));
+            System.out.println("年龄不能为空,参数:"+ JSONUtil.toJsonStr(e));
             return false;
         }else {
             return true;

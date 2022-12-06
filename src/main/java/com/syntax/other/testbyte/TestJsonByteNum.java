@@ -1,7 +1,7 @@
 package com.syntax.other.testbyte;
 
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 
 /**
  * 测试实际传输中数据类型对转json字符串字节大小的响应
@@ -19,8 +19,8 @@ public class TestJsonByteNum {
         StationCollectReq2 req2=new StationCollectReq2("1234567890123456789",
                 1,2L,3L,"1234567890123456789",5);
 
-        String str1= JSON.toJSONString(req);
-        String str2= JSON.toJSONString(req2);
+        String str1= JSONUtil.toJsonStr(req);
+        String str2= JSONUtil.toJsonStr(req2);
         System.out.println("req1:"+str1+",字节数:"+str1.getBytes().length);
         System.out.println("req2:"+str2+",字节数:"+str2.getBytes().length);
 

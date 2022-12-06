@@ -1,6 +1,6 @@
 package com.syntax.Collections;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -22,7 +22,7 @@ public class LinkHashSetTest {
         ipSet.add("192.168.22.23");
         ipSet.add("5.168.53.24");
         ipSet.add("192.168.77.25");
-        log.info("无序ipSet:"+ JSON.toJSONString(ipSet));
+        log.info("无序ipSet:"+ JSONUtil.toJsonStr(ipSet));
     }
 
 
@@ -33,7 +33,7 @@ public class LinkHashSetTest {
         ipSet.add("192.168.22.23");
         ipSet.add("5.168.53.24");
         ipSet.add("192.168.77.25");
-        log.info("有序ipSet:"+ JSON.toJSONString(ipSet));
+        log.info("有序ipSet:"+ JSONUtil.toJsonStr(ipSet));
     }
 
     public static void main(String[] args) {

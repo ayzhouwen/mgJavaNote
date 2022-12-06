@@ -8,7 +8,7 @@ import java.io.Writer;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import com.mysql.jdbc.log.Log;
+
 
 //生产者-消费者日志服务,没有停止服务
 public class LogWriter {

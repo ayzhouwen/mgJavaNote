@@ -1,7 +1,8 @@
 package com.syntax.Collections;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 
 import java.util.*;
 
@@ -25,15 +26,15 @@ public class LIST {
         bList.add("aaa");
         bList.add("aaa");
         // 并集
-        Collection<String> unionList = CollectionUtils.union(aList, bList);
+        Collection<String> unionList = CollUtil.union(aList, bList);
         // 交集
-        Collection<String> intersectionList = CollectionUtils.intersection(aList, bList);
+        Collection<String> intersectionList = CollUtil.intersection(aList, bList);
         // 是否存在交集
-        boolean isContained = CollectionUtils.containsAny(aList, bList);
+        boolean isContained = CollUtil.containsAny(aList, bList);
         // 交集的补集
-        Collection<String> disjunctionList = CollectionUtils.disjunction(aList, bList);
+        Collection<String> disjunctionList = CollUtil.disjunction(aList, bList);
         // 集合相减
-        Collection<String> subtractList = CollectionUtils.subtract(aList, bList);
+        Collection<String> subtractList = CollUtil.subtract(aList, bList);
 
         // 排序
         Collections.sort((List<String>) unionList);
@@ -42,17 +43,17 @@ public class LIST {
         Collections.sort((List<String>) subtractList);
 
         // 测试
-        System.out.println("A: " + ArrayUtils.toString(aList.toArray()));
-        System.out.println("B: " + ArrayUtils.toString(bList.toArray()));
+        System.out.println("A: " + ArrayUtil.toString(aList.toArray()));
+        System.out.println("B: " + ArrayUtil.toString(bList.toArray()));
         System.out.println("A has one of B? : " + isContained);
         System.out.println("Union(A, B): "
-                + ArrayUtils.toString(unionList.toArray()));
+                + ArrayUtil.toString(unionList.toArray()));
         System.out.println("Intersection(A, B): "
-                + ArrayUtils.toString(intersectionList.toArray()));
+                + ArrayUtil.toString(intersectionList.toArray()));
         System.out.println("Disjunction(A, B): "
-                + ArrayUtils.toString(disjunctionList.toArray()));
+                + ArrayUtil.toString(disjunctionList.toArray()));
         System.out.println("Subtract(A, B): "
-                + ArrayUtils.toString(subtractList.toArray()));
+                + ArrayUtil.toString(subtractList.toArray()));
     }
     //测试随机数包含
     public  static void contain(){

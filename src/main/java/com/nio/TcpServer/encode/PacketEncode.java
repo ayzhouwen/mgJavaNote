@@ -1,6 +1,8 @@
 package com.nio.TcpServer.encode;
 
-import org.apache.commons.lang.StringUtils;
+
+
+import cn.hutool.core.util.StrUtil;
 
 import java.nio.ByteBuffer;
 
@@ -9,7 +11,7 @@ public class PacketEncode {
     //一个完整的应用层数据包格式:消息头(4个字节存储消息体长度)+消息体 进行数据编码,消息头记录数据长度,占用4个字节,消息体包含
     //msglen=4+bodylen
     public  static ByteBuffer HeadBodyEncode(String msg){
-        if (StringUtils.isEmpty(msg)){
+        if (StrUtil.isEmpty(msg)){
             return  null;
         }
         int bodylen=msg.getBytes().length;

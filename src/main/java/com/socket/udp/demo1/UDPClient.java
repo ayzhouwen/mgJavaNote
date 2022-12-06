@@ -1,15 +1,14 @@
 package com.socket.udp.demo1;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.FileUtil;
 import com.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 参考:https://www.liaoxuefeng.com/wiki/1252599548343744/1319099802058785
@@ -59,6 +58,17 @@ public class UDPClient {
 
 
     public static void main(String[] args) {
+        while (true){
+            if (1>2){
+                break;
+            }
+            String ip=ConfigUtil.getConfigValue("udpServerIp");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         String ip=ConfigUtil.getConfigValue("udpServerIp");
         int port=Convert.toInt(ConfigUtil.getConfigValue("udpServerPort"));
         for (int i = 0; i < 1000000; i++) {

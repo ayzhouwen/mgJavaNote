@@ -1,7 +1,5 @@
 package com.syntax.Collections;
 
-import org.apache.commons.collections.map.HashedMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +31,7 @@ public class MAP {
     // map  测试返回空list后,list被重新赋值,map会不会重新引用,结论:不会
 
     public  static  void  nullList(){
-        Map<String,List<String>> map=new HashedMap();
+        Map<String,List<String>> map=new HashMap();
         List<String> list=  map.get("add");
         if (list==null){
             list=new ArrayList<>();

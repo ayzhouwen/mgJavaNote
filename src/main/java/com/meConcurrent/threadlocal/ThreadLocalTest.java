@@ -1,9 +1,8 @@
 package com.meConcurrent.threadlocal;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.collections.map.HashedMap;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +23,7 @@ public class ThreadLocalTest {
         Map<String, Map<String, List>> local = localChange.get();
         if (local == null) {
             local = new HashMap<>();
-            Map<String, List> map = new HashedMap();
+            Map<String, List> map = new HashMap();
             map.put("jRemoveList", jRemoveList);
             map.put("jUpdateList", jUpdateList);
             map.put("jSaveList", jSaveList);
@@ -59,8 +58,8 @@ public class ThreadLocalTest {
         local = localChange.get();
 
         System.out.println(local);
-         JSONObject object= (JSONObject)JSON.toJSON(local);
-        System.out.println(JSON.toJSONString(object));
+         JSONObject object= (JSONObject) JSONUtil.parseObj(local);
+        System.out.println(JSONUtil.toJsonStr(object));
 
         localChange.remove();
         localChange.set(null);

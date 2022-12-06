@@ -1,8 +1,8 @@
 package com.util;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IORuntimeException;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,10 +10,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ConfigUtil {
+
     public static String getConfigValue(String key){
         try {
-            String json= FileUtil.readUtf8String(JarTool.getJarDir()+"/myconfig.json");
-            return JSON.parseObject(json).getString(key);
+             String fileFath=ClassUtil.getClassPath()+"/myconfig.json";
+            log.info("当前配置文件路径:{}",fileFath);
+            String json= FileUtil.readUtf8String(fileFath);
+            return JSONUtil.parseObj(json).getStr(key);
         } catch (Exception e) {
            log.error("获取配置信息异常",e);
         }
