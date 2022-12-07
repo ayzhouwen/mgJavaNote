@@ -58,20 +58,9 @@ public class UDPClient {
 
 
     public static void main(String[] args) {
-        while (true){
-            if (1>2){
-                break;
-            }
-            String ip=ConfigUtil.getConfigValue("udpServerIp");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
         String ip=ConfigUtil.getConfigValue("udpServerIp");
         int port=Convert.toInt(ConfigUtil.getConfigValue("udpServerPort"));
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1; i++) {
             poolExecutor.execute(()->{
                 sendudp(ip,port);
             });

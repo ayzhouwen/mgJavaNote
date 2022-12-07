@@ -1,7 +1,6 @@
 package com.util;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +12,7 @@ public class ConfigUtil {
 
     public static String getConfigValue(String key){
         try {
-             String fileFath=ClassUtil.getClassPath()+"/myconfig.json";
+             String fileFath=JarTool.getJarDir()+"/myconfig.json";
             log.info("当前配置文件路径:{}",fileFath);
             String json= FileUtil.readUtf8String(fileFath);
             return JSONUtil.parseObj(json).getStr(key);
