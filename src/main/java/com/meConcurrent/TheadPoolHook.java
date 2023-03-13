@@ -2,13 +2,9 @@ package com.meConcurrent;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-//测试线程池钩子
 import java.util.concurrent.atomic.AtomicLong;
-
-import sun.util.logging.resources.logging;
 public class TheadPoolHook extends ThreadPoolExecutor {
 	public TheadPoolHook(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue) {

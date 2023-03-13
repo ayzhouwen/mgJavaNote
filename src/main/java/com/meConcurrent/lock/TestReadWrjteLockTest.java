@@ -3,6 +3,8 @@ package com.meConcurrent.lock;
 //读写锁测试
 //来源:http://www.cnblogs.com/liuling/p/2013-8-21-03.html
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,10 +18,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @修改者:
  * @参数: * @param null
  */
+@Slf4j
 public class TestReadWrjteLockTest {
     public static void main(String[] args) {
-       // test1();
-        test2();
+        test1();
+//        test2();
     }
 
     public static void test1() {
@@ -62,7 +65,7 @@ public class TestReadWrjteLockTest {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        System.out.println(cacheDemo.get( Long.toString(new Random().nextInt(3))));
+                        log.info(cacheDemo.get( Long.toString(new Random().nextInt(3)))+"");
                     }
                 }
             }).start();
