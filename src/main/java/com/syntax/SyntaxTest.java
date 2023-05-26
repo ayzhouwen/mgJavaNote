@@ -2,23 +2,27 @@ package com.syntax;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import com.util.MyDateUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import sun.misc.Unsafe;
-import sun.reflect.CallerSensitive;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.locks.LockSupport;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author admin
  */
 //临时随手代码测试类,可以忽略次类d
+
+
+class MyDog<A extends String,B,C,D,E,F>{
+    A getDog(){
+       return (A) "AAAAA";
+    }
+}
 @Slf4j
 class SyntaxTest {
     public static void test(List<?> list) {
@@ -26,19 +30,26 @@ class SyntaxTest {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        long s =System.currentTimeMillis();
-        Thread mainT=Thread.currentThread();
-        LockSupport.unpark(mainT);
-        new  Thread(()->{
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        Consumer<String> consumer1 = s -> System.out.print("车名："+s.split(",")[0]);
+        Consumer<String> consumer2 = s -> System.out.println("-->颜色："+s.split(",")[1]);
+
+        String[] strings = {"保时捷,白色", "法拉利,红色"};
+        for (String string : strings) {
+            consumer1.andThen(consumer2).accept(string);
+        }
+
+        Function<Integer, Integer> function1 = e -> e * 2;
+        Function<Integer, Integer> function2 = e -> e * e;
+        Function<Integer, Integer> function3 =new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return integer+integer;
             }
-            LockSupport.unpark(mainT);
-        }).start();
-        LockSupport.parkNanos(1000000000L*60);
-        log.info(MyDateUtil.execTime("测试纳秒",s));
+        };
+
+                Integer apply2 = function1.compose(function2).apply(3);
+        System.out.println(apply2);
+        System.out.println(function3.apply(5));
 
 
     }
@@ -50,61 +61,6 @@ class SyntaxTest {
                 .toDateStr() + " " + time + ":00" );
     }
 
-    @CallerSensitive
-    public static Unsafe getUnsafe() {
-        try {
-            Field field = Unsafe.class.getDeclaredField("theUnsafe");
-            field.setAccessible(true);
-            return (Unsafe) field.get(null);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-
-    private static class Node<E> {
-        volatile E item;
-        volatile Node<E> next;
-
-        /**
-         * Constructs a new node.  Uses relaxed write because item can
-         * only be seen after publication via casNext.
-         */
-        Node(E item) {
-            UNSAFE.putObject(this, itemOffset, item);
-        }
-
-        boolean casItem(E cmp, E val) {
-            return UNSAFE.compareAndSwapObject(this, itemOffset, cmp, val);
-        }
-
-        void lazySetNext(Node<E> val) {
-            UNSAFE.putOrderedObject(this, nextOffset, val);
-        }
-
-        boolean casNext(Node<E> cmp, Node<E> val) {
-            return UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
-        }
-
-        // Unsafe mechanics
-
-        private static final sun.misc.Unsafe UNSAFE;
-        private static final long itemOffset;
-        private static final long nextOffset;
-
-        static {
-            try {
-                UNSAFE = getUnsafe();
-                Class<?> k = Node.class;
-                itemOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("item"));
-                nextOffset = UNSAFE.objectFieldOffset
-                        (k.getDeclaredField("next"));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        }
-    }
 }
 
 

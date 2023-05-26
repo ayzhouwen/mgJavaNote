@@ -33,7 +33,10 @@ public class TestCompletableFuture2 {
 //        CompletableFuture<Map<String, String>> replicationFuture = new CompletableFuture<>();
         // replicationFuture.complete(map);
         replicationFuture.thenApply(t->{
-            log.info("thenApply1:"+t);
+            log.info("thenApply1:{}",t);
+            return null;
+        }).thenApply(t->{
+            log.info("thenApply1-1:"+t);
             return null;
         });
         replicationFuture.handle((t,u)->{
@@ -49,5 +52,16 @@ public class TestCompletableFuture2 {
         replicationFuture.thenAcceptAsync(r->{
             log.info("异步线程执行thenAcceptAsync2:"+r);
         });
+        replicationFuture.thenApply(t->{
+            log.info("thenApply2:"+t);
+            return "哈哈";
+        });
+        map.put("lol","撸啊撸");
+//        replicationFuture.complete(map);
+        replicationFuture.thenApply(t->{
+            log.info("thenApply3:"+t);
+            return "哼哈";
+        });
+
     }
 }

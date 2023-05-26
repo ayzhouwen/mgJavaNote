@@ -9,12 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 public class LabelTest {
     public static void main(String[] args) throws InterruptedException {
         abc:
-        if(2>1){
-            log.info("1");
-            Thread.sleep(1000);
-            break abc;
-
+        if(3>1){
+            if(2>1){
+                log.info("1");
+                Thread.sleep(1000);
+                break abc;
+            }
+            //如果上面有 break abc;下面这行不会输出
+            log.info("测试break 标签 if");
         }
+
 
 
         outer: for (int i = 101; i < 150; i++) {
