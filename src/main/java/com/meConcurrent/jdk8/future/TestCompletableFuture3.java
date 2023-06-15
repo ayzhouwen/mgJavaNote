@@ -1,4 +1,4 @@
-package com.meConcurrent.future;
+package com.meConcurrent.jdk8.future;
 
 import com.util.MyDateUtil;
 import lombok.extern.slf4j.Slf4j;

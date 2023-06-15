@@ -1,4 +1,4 @@
-package com.meConcurrent.future;
+package com.meConcurrent.jdk8.future;
 
 import com.util.MyDateUtil;
 
