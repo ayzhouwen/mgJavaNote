@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 线程池异常测试
+ * 线程池异常测试，结论：execute内部拉姆达函数发生异常，不会干扰其他的任务，也不会影响主线程
  */
 @Slf4j
 public class PoolExcept2 {
