@@ -8,9 +8,24 @@ import java.util.*;
 /**
  * 测试字符串OOM -Xms128M -Xmx128M
  * <p>
- * 结论：jdk1.8 字符串实际存储在堆中，字符串常量池存储的是内存地址，
- * 只要不使用集合数组长期持有，那么无论是字符串疯狂拼接还是 字符串疯狂new,还是StringBuilder 疯狂append 都会自己释放
- * 执行1分钟3中方法测试结果
+ * 结论：
+ * 1.jdk1.8 字符串实际存储在堆中，字符串常量池存储的是内存地址，
+ * 2.只要不使用集合数组长期持有，那么无论是字符串疯狂拼接还是 字符串疯狂new,还是StringBuilder 疯狂append 都会自己释放
+ * 但是长时间运行也会OOM,测试运行2小时后运行joinStr方法，发生了OOM
+ * D:\zw\mycode\java\mgJavaNote\target>java -Xms128M -Xmx128M -jar mgJavaNote-1.0-SNAPSHOT.jar
+ * Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+ *         at java.util.Arrays.copyOf(Arrays.java:3332)
+ *         at java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:124)
+ *         at java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:448)
+ *         at java.lang.StringBuilder.append(StringBuilder.java:136)
+ *         at com.jvm.my.StrOOMTest.joinStr(StrOOMTest.java:45)
+ *         at com.jvm.my.StrOOMTest.main(StrOOMTest.java:105)
+ *
+ *
+ *
+ *
+ *
+ * 3.执行1分钟3中方法测试结果
  * （1）strAppend
  * Eden Space (41.500M，41.500M): 36.253M，14195 collections，10.023s
  * old Gen (85.500M，85.500M): 66.623M, 0 collections.0s
@@ -102,6 +117,6 @@ public class StrOOMTest {
 
     public static void main(String[] args) {
         StrOOMTest strOOMTest = new StrOOMTest();
-        strOOMTest.strAppend();
+        strOOMTest.joinStr();
     }
 }
