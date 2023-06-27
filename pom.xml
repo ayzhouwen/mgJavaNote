@@ -14,7 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <!--    <exec.mainClass>com.socket.udp.demo1.UDPClient</exec.mainClass>-->
 <!--    <exec.mainClass>com.syntax.spi.SPITest</exec.mainClass>-->
-    <exec.mainClass>com.syntax.SyntaxTest</exec.mainClass>
+    <exec.mainClass>com.jvm.my.StrOOMTest</exec.mainClass>
   </properties>
 
   <build>
