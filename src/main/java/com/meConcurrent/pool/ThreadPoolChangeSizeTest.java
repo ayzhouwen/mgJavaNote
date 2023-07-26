@@ -5,11 +5,14 @@ import com.util.MyMonitorUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 线程池扩容与缩容测试
+ * 线程池扩容与缩容测试，与释放线程核心线程（如果释放完黑那些线程数量后，此时没有用户线程，那么jvm会退出），
+ *
  */
 @Slf4j
 public class ThreadPoolChangeSizeTest {
@@ -52,7 +55,61 @@ public class ThreadPoolChangeSizeTest {
 
     }
 
+    /**
+     * 释放核心线程,注意释放完核心线程，如果没有其他用户线程，那么jvm会退出
+     */
+    public static void freeCoreThread(){
+        AtomicLong atomicLong=new AtomicLong();
+        ThreadPoolExecutor pools=new ThreadPoolExecutor(10,10,
+                5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(10));
+       //自定义拒绝策略
+        pools.setRejectedExecutionHandler((runnable,executor)->{
+            log.error("队列满了:{}",atomicLong.incrementAndGet());
+        });
+        //任务执行完成释放核心线程
+        pools.allowCoreThreadTimeOut(true);
+        for (int i = 0; i <30 ; i++) {
+            int finalI = i;
+            pools.execute(()->{
+                log.info("第{}个线程执行", finalI);
+                try {
+                    Thread.sleep(1000*3);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                log.info("@@@@第{}个线程执行完毕@@@@", finalI);
+            });
+        }
+        //第二轮测试
+        log.info("任务分发完成");
+        try {
+            //防止任务提前执行
+            Thread.sleep(1000*30);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 30; i <60 ; i++) {
+            int finalI = i;
+            pools.execute(()->{
+                log.info("第{}个线程执行", finalI);
+                try {
+                    Thread.sleep(1000*3);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                log.info("@@@@第{}个线程执行完毕@@@@", finalI);
+            });
+        }
+
+        log.info("任务分发完成2");
+
+
+    }
+
     public static void main(String[] args) {
-        expand();
+//        expand();
+        freeCoreThread();
     }
 }
