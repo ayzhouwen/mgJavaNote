@@ -17,6 +17,7 @@ public class TestThreadLocal {
 				
 				System.out.println(tl1.get().id);
 				System.out.println(tl2.get().name);
+				tl1.remove();
 				
 		}
 }

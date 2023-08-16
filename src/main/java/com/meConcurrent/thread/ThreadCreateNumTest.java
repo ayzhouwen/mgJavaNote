@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ThreadCreateNumTest {
     public static void main(String[] args) throws InterruptedException {
         Object lockObj=new Object();
-        final int NUM_THREADS = 10000*1000;
+        final int NUM_THREADS = 100;
         long startTime = System.nanoTime();
 
         for (int i = 0; i < NUM_THREADS; i++) {

@@ -1,10 +1,13 @@
-package com.meConcurrent;
+package com.meConcurrent.pool;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+@Slf4j
 public class TheadPoolHook extends ThreadPoolExecutor {
 	public TheadPoolHook(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue) {
@@ -20,8 +23,8 @@ public class TheadPoolHook extends ThreadPoolExecutor {
    @Override
 protected void beforeExecute(Thread t, Runnable r) {
 	super.beforeExecute(t, r);
-	//System.out.println("Thead:"+t+",strat:"+r);
 	startTime.set(System.nanoTime());
+	log.info("beforeExecute===============");
 }
    
  @Override
@@ -32,7 +35,7 @@ protected void afterExecute(Runnable r, Throwable t) {
 		long taskTime=endTime-startTime.get();
 		numTasks.incrementAndGet();
 		totalTime.addAndGet(taskTime);
-		//System.out.println("  Thead:"+t+",end:"+r+",time="+taskTime);
+		log.info("afterExecute===============");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}finally {

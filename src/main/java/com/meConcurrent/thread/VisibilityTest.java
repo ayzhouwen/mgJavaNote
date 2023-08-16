@@ -1,26 +1,6 @@
-package com.meConcurrent;
+package com.meConcurrent.thread;
 
-class VisibilityThread extends Thread {
-	private  volatile boolean stop; // 不加volatile 会死循环
 
-	public void run() {
-		int i = 0;
-		System.out.println("start loop.");
-	//	while(!getStop()) {
-		while(!stop) {
-			i++;
-		}
-		System.out.println("finish loop,i=" + i);
-	}
-
-	public void stopIt() {
-		stop = true;
-	}
-
-	public boolean getStop(){
-		return stop;
-	}
-}
 
 
 class VisibilityRunable implements Runnable {
@@ -47,8 +27,29 @@ class VisibilityRunable implements Runnable {
 	}
 }
 public class VisibilityTest {
+	static class VisibilityThread extends Thread {
+		private  volatile boolean stop; // 不加volatile 会死循环
+
+		public void run() {
+			int i = 0;
+			System.out.println("start loop.");
+			//	while(!getStop()) {
+			while(!stop) {
+				i++;
+			}
+			System.out.println("finish loop,i=" + i);
+		}
+
+		public void stopIt() {
+			stop = true;
+		}
+
+		public boolean getStop(){
+			return stop;
+		}
+	}
 	public static void main(String[] args) throws Exception {
-		 VisibilityThread v = new VisibilityThread();
+		 VisibilityThread v = new VisibilityTest.VisibilityThread();
 		  v.start();
 		  
 //		VisibilityRunable v=new VisibilityRunable();

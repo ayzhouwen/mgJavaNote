@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.thread;
 //测试线程join方法
 //a线程调用b.join()方法,a线程会阻塞,直到b线程执行完毕,注意join方法一般情况下不是本线程调用的,而是由其他线程调用的
 //join的方法源码是判断显示是否存活,如果存活则阻塞当前线程!!!(注意是主调函数的线程)

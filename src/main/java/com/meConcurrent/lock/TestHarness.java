@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.lock;
 
 import java.util.concurrent.CountDownLatch;
 

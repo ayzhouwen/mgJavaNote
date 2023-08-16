@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 线程池扩容与缩容测试，与释放线程核心线程（如果释放完黑那些线程数量后，此时没有用户线程，那么jvm会退出），
- *
+ * 与核心线程释放测试
  */
 @Slf4j
 public class ThreadPoolChangeSizeTest {

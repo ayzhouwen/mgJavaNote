@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.thread;
 
 public class YieldTest   extends Thread {
 	 public YieldTest(String name) {  

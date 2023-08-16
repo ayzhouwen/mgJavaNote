@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.pool;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

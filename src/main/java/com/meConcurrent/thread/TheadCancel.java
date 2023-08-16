@@ -1,4 +1,4 @@
-package com.meConcurrent;
+package com.meConcurrent.thread;
 
 //生成素数线程取消测试
 class VThread extends Thread {
@@ -56,7 +56,7 @@ public class TheadCancel {
 	//	System.out.println(generator+","+generator.get());
 	
 		
-		VisibilityThread v = new VisibilityThread();
+		VisibilityTest.VisibilityThread v = new VisibilityTest.VisibilityThread();
 	        //v.start();
 	        thread.start();
 			try {

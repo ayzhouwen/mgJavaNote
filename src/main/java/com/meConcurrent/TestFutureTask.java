@@ -54,7 +54,7 @@ public class TestFutureTask {
 	         
 
 	        try {
-
+				futureTask.cancel(false);
 	            System.out.println("task运行结果"+futureTask.get());
 
 	        } catch (InterruptedException e) {
@@ -83,7 +83,7 @@ public class TestFutureTask {
 
 	        System.out.println("子线程在进行计算");
 
-	        Thread.sleep(5000);
+	        Thread.sleep(5000*100);
 
 	        int sum = 0;
 

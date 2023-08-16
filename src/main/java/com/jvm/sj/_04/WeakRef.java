@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 /**
  * <<实战java虚拟机>>4.3.4 弱引用-发现即回收,
  * jvm 参数配置  -Xms190M -Xmx190M -XX:+PrintGCDetails
+ *
  */
 public class WeakRef {
     public static class User{
@@ -23,10 +24,11 @@ public class WeakRef {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        User u=new User(1,"");
+        User u=new User(1,"花花");
         u.baa=new Byte[1024*1024*30];
         WeakReference<User> userWeakReference=new WeakReference<>(u);
-//      u=null;
+        // 当user为null时
+//         u=null;
         System.out.println(userWeakReference.get());
         System.gc();
         //不管当前内存空间足够与否,都会回收他的内存
