@@ -2,15 +2,25 @@ package com.syntax;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.checksum.CRC16;
+import cn.hutool.core.util.ByteUtil;
+import cn.hutool.core.util.HexUtil;
+import com.util.CRCUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author admin
@@ -18,143 +28,91 @@ import java.util.function.Function;
 //临时随手代码测试类,可以忽略次类d
 
 
-class MyDog<A extends String,B,C,D,E,F>{
-    A getDog(){
-       return (A) "AAAAA";
+class MyDog<A extends String, B, C, D, E, F> {
+    A getDog() {
+        return (A) "AAAAA";
     }
 }
+
+@FunctionalInterface
+interface SFunction<T, R> extends Function<T, R>, Serializable {
+}
+
 @Slf4j
-class SyntaxTest {
-    public static void test(List<?> list) {
-        Object o = list.get(1);
+public class SyntaxTest {
+
+    int i;
+
+    public void incr() {
+        synchronized (this) {
+            i++;
+        }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        Consumer<String> consumer1 = s -> System.out.print("车名："+s.split(",")[0]);
-        Consumer<String> consumer2 = s -> System.out.println("-->颜色："+s.split(",")[1]);
+    public static void main(String[] args)  {
 
-        String[] strings = {"保时捷,白色", "法拉利,红色"};
-        for (String string : strings) {
-            consumer1.andThen(consumer2).accept(string);
+        for (int j = 0; j < 2; j++) {
+            new Thread(()->{
+                Long i=1L;
+                while (true){
+                    i++;
+                }
+            }).start();
         }
 
-        Function<Integer, Integer> function1 = e -> e * 2;
-        Function<Integer, Integer> function2 = e -> e * e;
-        Function<Integer, Integer> function3 =new Function<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer integer) {
-                return integer+integer;
+        int port = 9080; // 选择要绑定的端口号
+        ServerSocket serverSocket = null;
+        try {
+             serverSocket = new ServerSocket(port);
+            System.out.println("当前服务监听端口 " + port);
+
+            while (true) {
+                Socket clientSocket = serverSocket.accept(); // 阻塞等待客户端连接
+                System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
+
+                // 在这里可以处理客户端请求，例如读取/写入数据
             }
-        };
-
-                Integer apply2 = function1.compose(function2).apply(3);
-        System.out.println(apply2);
-        System.out.println(function3.apply(5));
-
-
-    }
-
-    private static  DateTime getDateTime(String time ) {
-        return time.compareTo( DateTime.now().toString( "HH:mm" ) ) >= 0
-                ? DateUtil.parseDateTime( DateTime.now().toDateStr() + " " + time + ":00" )
-                : DateUtil.parseDateTime( DateUtil.offsetDay( DateUtil.parseDateTime( DateTime.now().toDateStr() + " " + time + ":00" ), 1 )
-                .toDateStr() + " " + time + ":00" );
-    }
-
-}
-
-
-
-@Getter
-enum DeviceTypeEnum {
-    cabinet("0001", "机柜"),
-    assetBar("0002", "资产条"),
-    ODF("0004", "ODF"),
-    DDF("0005", "DDF"),
-    VDF("0006", "VDF"),
-    NDF("0007", "NDF"),
-    PDU("0008", "PDU");
-
-    private String title;
-    private String code;
-
-    DeviceTypeEnum(String code, String title) {
-        this.code = code;
-        this.title = title;
-    }
-
-    public static String getTitleBycode(int code) {
-        DeviceTypeEnum[] values = DeviceTypeEnum.values();
-        for (DeviceTypeEnum value : values) {
-            if (value.code.equals(code)) {
-                return value.title;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
-        return "UNKNOWN";
+
     }
 
-    public static DeviceTypeEnum getEnumByCode(String code) {
-        return Arrays.stream(DeviceTypeEnum.values()).filter(e -> e.code.equals(code)).findFirst().orElse(null);
-    }
-}
 
-@Data
-class Person implements Serializable {
-
-    public Integer age;
-    public String name;
-
-    public Person next;
-}
-
-enum Color {
-    red("红色", 1), yellow("黄色", 2), green("绿色", 3);
-    // 成员变量
-    private String name;
-    private int index;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    // 构造方法
-    private Color(String name, int index) {
-        this.name = name;
-        this.index = index;
-    }
-
-    // 普通方法
-    public static String getName(int index) {
-        for (Color c : Color.values()) {
-            if (c.getIndex() == index) {
-                return c.name;
+    /**
+     * 获取线程快照信息
+     *
+     * @return
+     */
+    public static String getJavaStackTrace() {
+        StringBuffer msg = new StringBuffer();
+        for (Map.Entry<Thread, StackTraceElement[]> stackTrace : Thread.getAllStackTraces().entrySet()) {
+            Thread thread = (Thread) stackTrace.getKey();
+            StackTraceElement[] stack = (StackTraceElement[]) stackTrace.getValue();
+            if (thread.equals(Thread.currentThread())) {
+                continue;
+            }
+            msg.append("\n 线程:").append(thread.getName()).append("\n");
+            for (StackTraceElement element : stack) {
+                msg.append("\t").append(element).append("\n");
             }
         }
-        return null;
-    }
-
-    //覆盖方法
-
-
-    @Override
-    public String toString() {
-        return this.index + "_" + this.name;
+        return msg.toString();
     }
 
 
 }
+
+
+
+
+
 
 
 

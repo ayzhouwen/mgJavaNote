@@ -14,7 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <!--    <exec.mainClass>com.socket.udp.demo1.UDPClient</exec.mainClass>-->
 <!--    <exec.mainClass>com.syntax.spi.SPITest</exec.mainClass>-->
-    <exec.mainClass>com.jvm.my.StrOOMTest</exec.mainClass>
+    <exec.mainClass>com.syntax.SyntaxTest</exec.mainClass>
   </properties>
 
   <build>
@@ -67,7 +67,12 @@
 
     <dependency>
       <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
+      <artifactId>hutool-core</artifactId>
+      <version>5.7.22</version>
+    </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-json</artifactId>
       <version>5.7.22</version>
     </dependency>
     <dependency>
