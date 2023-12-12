@@ -30,7 +30,7 @@
             <!-- 日志文件保留最大时间滚动周期，比如当filaNamePattern中%d以为dd结尾时，则保留3600天-->
             <maxHistory>3600</maxHistory>
             <!-- 日志文件保留的总的最大大小-->
-            <totalSizeCap>1GB</totalSizeCap>
+            <totalSizeCap>1000MB</totalSizeCap>
         </rollingPolicy>
 
         <encoder
@@ -42,7 +42,7 @@
 
     <!-- log level TRACE, DEBUG, INFO, WARN, ERROR, ALL and OFF,default：DEBUG。-->
     <root level="INFO">
-<!--        <appender-ref ref="STDOUT" /> &lt;!&ndash; show log on console &ndash;&gt;-->
+        <appender-ref ref="STDOUT" /> <!-- show log on console -->
         <appender-ref ref="FILE" /> <!-- show log in file -->
     </root>
 </configuration>
