@@ -1,6 +1,7 @@
 package com.meConcurrent.thread;
 
-import cn.hutool.json.JSONUtil;
+
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -77,7 +78,7 @@ class UpdateVarRunable implements Runnable {
         }
 
         for (int i = 0; i <100000 ; i++) {
-            log.info("当前节点信息:{},内存地址:{}",JSONUtil.toJsonStr(TestThreadUpdateStatic.currNode),System.identityHashCode(TestThreadUpdateStatic.currNode));
+            log.info("当前节点信息:{},内存地址:{}", JSON.toJSONString(TestThreadUpdateStatic.currNode),System.identityHashCode(TestThreadUpdateStatic.currNode));
             try {
                 Thread.sleep(0);
             } catch (InterruptedException e) {

@@ -1,7 +1,10 @@
 package com.syntax.Collections;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
+
+
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashSet;
 

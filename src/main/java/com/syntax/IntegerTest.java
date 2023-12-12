@@ -1,6 +1,7 @@
 package com.syntax;
 
-import cn.hutool.json.JSONUtil;
+
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +48,7 @@ public class IntegerTest {
         person.setName("小米");
         v=888;
         log.info("v:"+v.toString()+name);
-        log.info(JSONUtil.toJsonStr(person));
+        log.info(JSON.toJSONString(person));
         log.info("w:"+w);
     }
 

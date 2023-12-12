@@ -1,6 +1,7 @@
 package com.meConcurrent.pool;
 
-import cn.hutool.json.JSONUtil;
+
+import com.alibaba.fastjson.JSON;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,7 +29,7 @@ public class ThreadPoolVarTest {
             t.submit(()->{
                 System.out.println("i值:"+ finalI);
                 String [] arr= str.split(",");
-                System.out.println(Thread.currentThread().getName()+"-"+ JSONUtil.toJsonStr(arr));
+                System.out.println(Thread.currentThread().getName()+"-"+ JSON.toJSONString(arr));
             });
         }
         try {

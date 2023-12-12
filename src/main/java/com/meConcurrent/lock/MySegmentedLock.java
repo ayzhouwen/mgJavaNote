@@ -1,6 +1,7 @@
 package com.meConcurrent.lock;
 
-import cn.hutool.json.JSONUtil;
+
+import com.alibaba.fastjson.JSON;
 import com.util.MyDateUtil;
 
 import java.util.Map;
@@ -38,7 +39,7 @@ public class MySegmentedLock {
         try {
             cdh.await();
             System.out.println(MyDateUtil.execTime("计算完成时间:",stime));
-            System.out.println("当前num值:" + JSONUtil.toJsonStr(numMap));
+            System.out.println("当前num值:" + JSON.toJSONString(numMap));
 
         } catch (InterruptedException e) {
             e.printStackTrace();
