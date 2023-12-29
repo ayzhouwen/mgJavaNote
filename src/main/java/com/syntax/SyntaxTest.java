@@ -1,18 +1,8 @@
 package com.syntax;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.ReflectUtil;
-import com.util.MyDateUtil;
+import cn.hutool.core.util.PageUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author admin
@@ -21,6 +11,7 @@ import java.util.Map;
 @Slf4j
 public class SyntaxTest {
     public static void main(String[] args)  {
+        System.out.println(JSON.toJSONString(PageUtil.rainbow(5, 20, 6)));
     }
 
 }
