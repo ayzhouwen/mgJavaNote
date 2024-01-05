@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BatchProcessUtil {
     public static void main(String[] args) {
-        int totalCount = 10;
-        int pageSize = 3;
+        int totalCount = 5;
+        int pageSize = 2;
 
         // 计算总页数
         int totalPage = PageUtil.totalPage(totalCount, pageSize);
@@ -25,8 +25,7 @@ public class BatchProcessUtil {
 
             // 模拟处理每个批次
             // 模拟处理每个批次的业务逻辑
-            endIndex=Math.min(endIndex,totalCount);
-            endIndex=endIndex-1;
+            endIndex=Math.min(endIndex,totalCount)-1;
             processBatch(startIndex, endIndex);
 
             System.out.println("处理批次：" + currentPage);
