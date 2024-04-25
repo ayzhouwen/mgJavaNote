@@ -1,130 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
-    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
-    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+<configuration debug="false">
 
-    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
-    <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-${file.encoding:-UTF-8}}"/>
-    <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
-    <property name="FILE_LOG_CHARSET" value="${FILE_LOG_CHARSET:-${file.encoding:-UTF-8}}"/> <!-- 日志存放路径 -->
-    <property name="log.path" value="./logs"/>
-    <!-- 日志输出格式 -->
-    <!--    <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>-->
-    <!-- 控制台输出 -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>${CONSOLE_LOG_CHARSET}</charset>
+    <!-- Where are log files -->
+    <property name="LOG_HOME" value="./log" />
+    <!-- Output to Console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--%d:date，%thread:thread，%-5level：error/debug/info... %msg：message，%n:new line -->
+            <!--            <pattern>%thread-%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n</pattern>-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}: %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- 系统日志输出 -->
-
-    <appender name="file_debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/mgJavaNote-debug.log</file>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/mgJavaNote.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/mgJavaNote-debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/mgJavaNote.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- 单个日志文件最大大小，当文件达到该大小则触发截断-->
-            <maxFileSize>100MB</maxFileSize>
+            <maxFileSize>200MB</maxFileSize>
             <!-- 日志文件保留最大时间滚动周期，比如当filaNamePattern中%d以为dd结尾时，则保留3600天-->
             <maxHistory>3600</maxHistory>
             <!-- 日志文件保留的总的最大大小-->
-            <totalSizeCap>5000MB</totalSizeCap>
+            <totalSizeCap>20000MB</totalSizeCap>
 
         </rollingPolicy>
         <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}: %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <!-- 过滤的级别 -->
-            <level>DEBUG</level>
+            <level>TRACE</level>
         </filter>
     </appender>
 
-    <!--    <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-    <!--        <file>${log.path}/mgJavaNote-info.log</file>-->
-    <!--        &lt;!&ndash; 循环政策：基于时间创建日志文件 &ndash;&gt;-->
-    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
-    <!--            &lt;!&ndash; 日志文件名格式 &ndash;&gt;-->
-    <!--            <fileNamePattern>${log.path}/mgJavaNote-info.%d{yyyy-MM-dd}.%i.log</fileNamePattern>-->
-    <!--            &lt;!&ndash; 单个日志文件最大大小，当文件达到该大小则触发截断&ndash;&gt;-->
-    <!--            <maxFileSize>100MB</maxFileSize>-->
-    <!--            &lt;!&ndash; 日志文件保留最大时间滚动周期，比如当filaNamePattern中%d以为dd结尾时，则保留3600天&ndash;&gt;-->
-    <!--            <maxHistory>3600</maxHistory>-->
-    <!--            &lt;!&ndash; 日志文件保留的总的最大大小&ndash;&gt;-->
-    <!--            <totalSizeCap>5000MB</totalSizeCap>-->
-    <!--        </rollingPolicy>-->
-    <!--        <encoder>-->
-    <!--            <pattern>${FILE_LOG_PATTERN}</pattern>-->
-    <!--        </encoder>-->
-    <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-    <!--            &lt;!&ndash; 过滤的级别 &ndash;&gt;-->
-    <!--            <level>INFO</level>-->
-    <!--        </filter>-->
-    <!--    </appender>-->
-
-    <!--    <appender name="file_warn" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-    <!--        <file>${log.path}/mgJavaNote-warn.log</file>-->
-    <!--        &lt;!&ndash; 循环政策：基于时间创建日志文件 &ndash;&gt;-->
-    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
-    <!--            &lt;!&ndash; 日志文件名格式 &ndash;&gt;-->
-    <!--            <fileNamePattern>${log.path}/mgJavaNote-warn.%d{yyyy-MM-dd}.%i.log</fileNamePattern>-->
-    <!--            &lt;!&ndash; 单个日志文件最大大小，当文件达到该大小则触发截断&ndash;&gt;-->
-    <!--            <maxFileSize>100MB</maxFileSize>-->
-    <!--            &lt;!&ndash; 日志文件保留最大时间滚动周期，比如当filaNamePattern中%d以为dd结尾时，则保留3600天&ndash;&gt;-->
-    <!--            <maxHistory>3600</maxHistory>-->
-    <!--            &lt;!&ndash; 日志文件保留的总的最大大小&ndash;&gt;-->
-    <!--            <totalSizeCap>5000MB</totalSizeCap>-->
-    <!--        </rollingPolicy>-->
-    <!--        <encoder>-->
-    <!--            <pattern>${FILE_LOG_PATTERN}</pattern>-->
-    <!--        </encoder>-->
-    <!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-    <!--            &lt;!&ndash; 过滤的级别 &ndash;&gt;-->
-    <!--            <level>WARN</level>-->
-    <!--        </filter>-->
-    <!--    </appender>-->
-
-    <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/mgJavaNote-error.log</file>
-        <!-- 循环政策：基于时间创建日志文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/mgJavaNote-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- 单个日志文件最大大小，当文件达到该大小则触发截断-->
-            <maxFileSize>100MB</maxFileSize>
-            <!-- 日志文件保留最大时间滚动周期，比如当filaNamePattern中%d以为dd结尾时，则保留3600天-->
-            <maxHistory>3600</maxHistory>
-            <!-- 日志文件保留的总的最大大小-->
-            <totalSizeCap>5000MB</totalSizeCap>
-        </rollingPolicy>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <!-- 过滤的级别 -->
-            <level>ERROR</level>
-            <!-- 匹配时的操作：接收（记录） -->
-            <onMatch>ACCEPT</onMatch>
-            <!-- 不匹配时的操作：拒绝（不记录） -->
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
-
-    <root level="info">
-        <appender-ref ref="console"/>
-        <appender-ref ref="file_debug"/>
-        <!--        <appender-ref ref="file_info"/>-->
-        <!--        <appender-ref ref="file_warn"/>-->
-        <appender-ref ref="file_error"/>
+    <!-- log level TRACE, DEBUG, INFO, WARN, ERROR, ALL and OFF,default：DEBUG。-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" /> <!-- show log on console -->
+        <appender-ref ref="FILE" /> <!-- show log in file -->
     </root>
 
-
-
-
-
-
+    <!-- 为指定包设置日志级别 -->
+<!--    <logger name="com.example.myapp" level="DEBUG"/>-->
 </configuration>
