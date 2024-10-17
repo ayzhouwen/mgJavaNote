@@ -7,21 +7,15 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.security.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//todo 优化：不能只用行来判断文本（语言一旦太长换行出错），应该用正在在一个大文本中去匹配
 public class SqlUtil {
     /**
      * 新建菜单sql
      */
     private static String insertIntoMenuFile="D:\\菜单.sql";
-//    private static String insertIntoMenuFile="D:\\workspace\\jeecg-boot\\src\\main\\java\\org\\jeecg\\modules\\dwmterminal\\loco\\vue3\\V20241016_1__menu_insert_LocoCheckConf.sql";
     /**
      * 插入菜单列表
      */
