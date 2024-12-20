@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TestCompletableFuture6 {
     /**
-     * 以后尽量用supplyAsync，如果用runAsync ，在get时会报空指针异常
+     *
      */
     public static void testTime1() {
         long stime=System.currentTimeMillis();
@@ -36,7 +36,7 @@ public class TestCompletableFuture6 {
 
                         if (e.equals("E")){
                             //模拟超时
-                            Thread.sleep(4000);
+                            Thread.sleep(40000);
                         }
 
                     } catch (Exception ex) {
@@ -52,7 +52,8 @@ public class TestCompletableFuture6 {
                 // 尝试在5秒内完成所有任务
                 combinedFuture.get(5, TimeUnit.SECONDS);
             } catch (Exception e) {
-                log.error("获取数据换装远获取数据异常", e);
+                //注意此时e.getMessage()返回null
+                log.error("获取数据换装远获取数据异常："+e.getMessage());
             }
         } finally {
             System.out.println(MyDateUtil.execTime("所有任务异步等待时间：",stime));
