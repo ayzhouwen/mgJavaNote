@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BigInsertSQLSplit {
     public static void main(String[] args) {
-        String inputFilePath = "C:\\Users\\ayzho\\Desktop\\新建文件夹\\sql2.txt"; // 输入文件路径
+        String inputFilePath = "C:\\Users\\ayzho\\Desktop\\新建文件夹\\sql1.txt"; // 输入文件路径
         String outputDir = "C:\\Users\\ayzho\\Desktop\\新建文件夹\\distsql\\";      // 输出目录
         int chunkSize = 10000;                              // 每个文件的行数
 
@@ -66,7 +66,7 @@ public class BigInsertSQLSplit {
      * @throws IOException 文件读写异常
      */
     private static void writeChunkToFile(List<String> chunk, String outputDir, int fileCount) throws IOException {
-        String outputFilePath = outputDir + "output_part_" + fileCount + ".sql";
+        String outputFilePath = outputDir + "output_part_" + fileCount + ".txt";
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath));
 
         for (String line : chunk) {
