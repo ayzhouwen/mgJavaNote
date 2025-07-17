@@ -56,19 +56,19 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>nexus-aliyun</id>
-      <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-    </repository>
-  </repositories>
+<!--  <repositories>-->
+<!--    <repository>-->
+<!--      <id>nexus-aliyun</id>-->
+<!--      <url>http://maven.aliyun.com/nexus/content/groups/public</url>-->
+<!--    </repository>-->
+<!--  </repositories>-->
 
   <dependencies>
 
     <dependency>
       <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-      <version>5.7.22</version>
+      <artifactId>hutool-all</artifactId>
+      <version>5.8.26</version>
     </dependency>
     <dependency>
       <groupId>com.alibaba</groupId>
@@ -104,7 +104,18 @@
       <artifactId>jol-core</artifactId>
       <version>0.9</version>
     </dependency>
-
+    <!-- 七牛云SDK -->
+    <dependency>
+      <groupId>com.qiniu</groupId>
+      <artifactId>qiniu-java-sdk</artifactId>
+      <version>7.4.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>okhttp</artifactId>
+          <groupId>com.squareup.okhttp3</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
   </dependencies>
 
