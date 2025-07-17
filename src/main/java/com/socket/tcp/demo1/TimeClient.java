@@ -1,5 +1,9 @@
 package com.socket.tcp.demo1;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
+import com.util.ConfigUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +28,7 @@ public class TimeClient {
                             e.printStackTrace();
                         }
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        out.println("当前时间:" + System.currentTimeMillis());
+                        out.println("你好服务器我是客户端:"+Thread.currentThread().getName()+":【"+ DateUtil.now()+"】" +System.currentTimeMillis());
                     } catch (IOException e) {
                         if (error > 3) {
 
@@ -46,12 +50,12 @@ public class TimeClient {
             @Override
             public void run() {
 
-                int port = 8084;
+                int port = Convert.toInt(ConfigUtil.getConfigValue("tcpServerPort"));;
                 Socket socket = null;
                 BufferedReader in = null;
                 PrintWriter out = null;
                 try {
-                    socket = new Socket("10.0.1.243", port);
+                    socket = new Socket(Convert.toStr(ConfigUtil.getConfigValue("tcpServerIp")), port);
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     //out=new PrintWriter(socket.getOutputStream(), true);
                     TimeClient.mySend(socket);

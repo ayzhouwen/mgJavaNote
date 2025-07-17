@@ -1,1 +1,1 @@
-{"udpServerIp":"127.0.0.1","udpServerPort":"9111"}
+{"udpServerIp":"0.0.0.0","udpServerPort":"9111","tcpServerIp":"0.0.0.0","tcpServerPort":"9112"}
